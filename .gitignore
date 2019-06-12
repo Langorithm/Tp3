@@ -1,0 +1,7 @@
+CMakeCache.txt
+CMakeFiles
+*.gch
+cmake_install.cmake
+Makefile
+*.a
+correrTests
