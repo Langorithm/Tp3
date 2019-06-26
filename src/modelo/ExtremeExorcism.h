@@ -64,7 +64,7 @@ private:
     };
     struct infoFantasmaPriv{
         Fantasma f;
-        infoFantasmaPub** vivo?;
+        infoFantasmaPub** vivo;
     };
 
   list< infoJugadorPub > _jvPub;

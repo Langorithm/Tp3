@@ -23,17 +23,25 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     infoJugadorPriv jPriv = _jugadores.at(j);
     Evento evento_anterior = jPriv.acciones.back();
 
-    if (a == DISPARAR){ // esDisparo(a)
+    if (a == DISPARAR){ // esDisparo?(a)
         Evento evento_disparar = evento_anterior;
         evento_disparar.dispara = true;
         jPriv.acciones.push_back(evento_disparar);
 
             // if _matar_fantasmas(evento_disparar.pos, evento_disparar.pos) then nuevaROnda
-    } else if( a != DISPARAR && a != ESPERAR ){ // esMover
+    } else if( a != DISPARAR && a != ESPERAR ){ // esMover?(a)
         Pos nuevaPosicion = evento_anterior.pos;
-        if(){
-
+        Dir nuevaDireccion = evento_anterior.dir;
+        if(){ // hayVecinoLibre(avanzarCasillero(pos, dir)) then nuevaPosicion = avanzarCasillero, same with nuevaDir
+              // Propongo hacer la funcion privada hayVecinoLibre en la clase ExtremeExorcism.
         }
+        Evento evento_movimiento = Evento(nuevaPosicion, nuevaDireccion, false);
+        jPriv.acciones.push_back(evento_movimiento);
+        /* Aca se supone que actualizamos la pos y dir del jugador en la lista publica, pero la forma que tenemos
+         * de hacerlo es iterando sobre jvPub entero. que es O(#jv), chequear que no rompa la complejidad.
+         */
+    } else if(a == ESPERAR){ //esEsperar(a)
+        // Aca
     }
 };
 
