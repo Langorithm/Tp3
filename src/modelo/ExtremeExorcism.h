@@ -67,18 +67,18 @@ private:
         infoFantasmaPub** vivo?;
     };
 
-  list< infoJugadorPub > jvPub;
+  list< infoJugadorPub > _jvPub;
 
-  list< infoJugadorPriv > jvPriv;
+  list< infoJugadorPriv > _jvPriv;
 
-  string_map jugadores;
+  string_map _jugadores;
 
-  list< infoFantasmaPriv > fvPriv;
-  list< infoFantasmaPub > fvPub;
-  algo2::linear_set fantasmas;
-  Habitacion hab;
-  vector< vector<bool> > matrizDisparos;
-  int cantidad_Pasos;
+  list< infoFantasmaPriv > _fvPriv;
+  list< infoFantasmaPub > _fvPub;
+  algo2::linear_set _fantasmas;
+  Habitacion _hab;
+  vector< vector<bool> > _matrizDisparos;
+  int _cantidad_Pasos;
 };
 
 #endif

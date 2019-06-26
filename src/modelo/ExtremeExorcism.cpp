@@ -2,12 +2,18 @@
 
 ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
                 list<Accion> acciones_fantasma, Contexto *ctx){
-    // COMPLETAR
+    _hab = h;
+    // Me hago el fantasma principal y lo meto en this
+    //fantasma inicial = hagoFantasma(acciones_fantasma, f_init);
+    for (auto j : jugadores){
+        // insertar el trie jugadores
+    }
+    // Usando contexto defino las posiciones y direcciones de los jugadores
 };
 
 
 void ExtremeExorcism::pasar(){
-    // COMPLETAR
+
 };
 
 
