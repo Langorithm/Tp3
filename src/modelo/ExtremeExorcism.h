@@ -1,6 +1,8 @@
 #ifndef EXTREME_EXORCISM_H
 #define EXTREME_EXORCISM_H
 
+
+
 #include "Contexto.h"
 #include "Habitacion.h"
 #include "TiposJuego.h"
@@ -11,6 +13,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <modulos_basicos/linear_set.h>
 
 using namespace std;
 
@@ -44,7 +47,38 @@ public:
   const list<Fantasma> &fantasmas() const;
 
 private:
-  // Completar
+  // Empiezo por declarar todas las estructuras que estan en la representacion del modulo juego.md del tp2
+  // Nótese que algunos structs (como Evento) estan en TiposJuego.h
+
+    struct infoJugadorPub{
+      Jugador identificador;
+      Pos pos;
+      Dir dir;
+  };
+    struct infoJugadorPriv{
+        list<Evento> acciones;
+    };
+    struct infoFantasmaPub{
+        Pos pos;
+        Dir dir;
+    };
+    struct infoFantasmaPriv{
+        Fantasma f;
+        infoFantasmaPub** vivo?;
+    };
+
+  list< infoJugadorPub > jvPub;
+
+  list< infoJugadorPriv > jvPriv;
+
+  string_map jugadores;
+
+  list< infoFantasmaPriv > fvPriv;
+  list< infoFantasmaPub > fvPub;
+  algo2::linear_set fantasmas;
+  Habitacion hab;
+  vector< vector<bool> > matrizDisparos;
+  int cantidad_Pasos;
 };
 
 #endif
