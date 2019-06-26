@@ -40,11 +40,17 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
         /* Aca se supone que actualizamos la pos y dir del jugador en la lista publica, pero la forma que tenemos
          * de hacerlo es iterando sobre jvPub entero. que es O(#jv), chequear que no rompa la complejidad.
          */
+        for(auto i : _jvPub){
+            if(i.identificador == j)
+                i.dir = nuevaDireccion;
+                i.pos = nuevaPosicion;
+        }
     } else if(a == ESPERAR){ //esEsperar(a)
-        Evento evento_nuevo = evento_anterior;
         evento_nuevo.dispara = false;
     }
     jPriv.acciones.push_back(evento_nuevo);
+     _losDemasJugadoresEsperan(j);
+     pasar(); // Pasar tiempo
 };
 
 

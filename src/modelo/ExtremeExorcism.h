@@ -79,6 +79,22 @@ private:
   Habitacion _hab;
   vector< vector<bool> > _matrizDisparos;
   int _cantidad_Pasos;
+
+  // Funciones
+
+  void _losDemasJugadoresEsperan(Jugador j){
+      list< infoJugadorPub >::iterator itPublico = begin(_jvPub);
+      for(auto jug : _jvPriv){
+
+          if( itPublico->identificador != j) {
+
+              Evento evento_anterior = jug.acciones.back();
+              Evento evento_nuevo = Evento(evento_anterior.pos, evento_anterior.dir, false);
+              jug.acciones.push_back(evento_nuevo);
+          }
+          itPublico++;
+      }
+  }
 };
 
 #endif
