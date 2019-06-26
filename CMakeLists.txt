@@ -3,6 +3,13 @@
 cmake_minimum_required(VERSION 3.5)
 project(2019-c1-tp3)
 
+# Esto majora el debugging con gdb
+# Cambiar -O1 por -O0 si trae problemas, le puse O1 para que no me tire
+# warnings de fortify
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O1")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O1")
+
 option(WITH_GUI "Preparar compilación con interfaz gráfica (necesita SDL instalado)" OFF)
 
 SET( CMAKE_EXPORT_COMPILE_COMMANDS ON )
