@@ -67,7 +67,7 @@ Habitacion string_to_hab(string s) {
 
 Habitacion::Habitacion(unsigned int tam, set<Pos> ocupadas){
     for(int i=0; i<tam; i++){
-        vector<bool> col(tam);
+        vector<bool> col;
         for(int j=0; j<tam; j++)
             if(ocupadas.count(make_pair(i, j)))
                 col.push_back(true);
