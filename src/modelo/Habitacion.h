@@ -17,6 +17,8 @@ public:
 
     bool posValida(Pos) const;
 
+    bool ocupado(Pos) const;
+
     bool operator==(const Habitacion&) const;
 
 private:

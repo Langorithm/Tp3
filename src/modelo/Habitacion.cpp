@@ -89,6 +89,14 @@ bool Habitacion::posValida(Pos pos) const {
 	    !matriz[pos.first][pos.second];
 };
 
+bool Habitacion::ocupado(Pos pos) const {
+    return pos.first >= 0 &&
+           pos.first < tam() &&
+           pos.second >= 0 &&
+           pos.second < tam() &&
+           matriz[pos.first][pos.second];
+};
+
 bool Habitacion::operator==(const Habitacion& hab2) const{
     return matriz == hab2.matriz;
 };
