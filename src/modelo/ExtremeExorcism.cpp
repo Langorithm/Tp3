@@ -1,6 +1,7 @@
 #include <assert.h>
 #include "ExtremeExorcism.h"
-// Start Funciones Privadas
+
+//--------------------------------------------- Start Funciones Privadas
 
 void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     list< infoJugadorPub >::iterator itPublico = begin(_jvPub);
@@ -111,7 +112,29 @@ void ExtremeExorcism::_limpiarMatrizDisparos(const Habitacion &h){
         _matrizDisparos.push_back(col);
     }
 }
-// end Funciones Privadas
+
+Evento ExtremeExorcism::_iesimo(const list<Evento> &eventos, int indice){
+    int i = 0;
+    for(auto e : eventos){
+        if(i == indice){
+            return e;
+        }
+        i++;
+    }
+}
+
+// Sospecho error by one
+Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantPasos){
+    int tamano = eventos.size();
+    int indice = cantPasos % (tamano * 2);
+    if(indice < tamano){
+        return _iesimo(eventos, indice);
+    } else {
+        indice = tamano - (indice % tamano);
+        return _iesimo(eventos, indice);
+    }
+}
+//--------------------------------------- end Funciones Privadas
 
 // Start Funciones Publicas
 
@@ -134,7 +157,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 
 
 void ExtremeExorcism::pasar(){
-
+    
     _cantidadPasos++;
 };
 
@@ -205,7 +228,7 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
     list<PosYDir> res;
     auto fanPub = _fvPub.begin();
     for(auto fanPriv : _fvPriv){
-        //Evento evento_fantasma = _dame
+        Evento evento_fantasma = _dameEvento(fanPriv.f, _cantidadPasos);
         fanPub++;
     }
 };
