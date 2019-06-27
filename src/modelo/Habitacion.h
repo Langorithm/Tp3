@@ -13,7 +13,7 @@ class Habitacion {
 public:
     Habitacion(unsigned int tam, set<Pos> ocupadas);
 
-    Habitacion();
+    Habitacion(); // Constructor agregado para habitacion vacia
 
     unsigned int tam() const;
 
