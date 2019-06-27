@@ -81,12 +81,12 @@ unsigned int Habitacion::tam() const {
     return matriz.size();
 }
 
-bool Habitacion::ocupado(Pos pos) const {
+bool Habitacion::posValida(Pos pos) const {
     return pos.first >= 0 &&
         pos.first < tam() &&
         pos.second >= 0 &&
         pos.second < tam() &&
-	    matriz[pos.first][pos.second];
+	    !matriz[pos.first][pos.second];
 };
 
 bool Habitacion::operator==(const Habitacion& hab2) const{

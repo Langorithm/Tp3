@@ -19,6 +19,43 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
 void ExtremeExorcism::_revivirTodosLosJugadores(){
     // Completar
 }
+
+void ExtremeExorcism::_aplicarMover(Accion a, PosYDir &pd){
+    if(a == MABAJO){
+        if((_hab.posValida(pd.pos))){
+           pd.pos.second++;
+           pd.dir = ABAJO;
+        }
+    } else if(a == MARRIBA){
+        if((_hab.posValida(pd.pos))){
+            pd.pos.second--;
+            pd.dir = ARRIBA;
+        }
+    } else if(a == MDERECHA){
+        if((_hab.posValida(pd.pos))){
+            pd.pos.first++;
+            pd.dir = DERECHA;
+        }
+    } else if(a == MIZQUIERDA){
+        if((_hab.posValida(pd.pos))){
+            pd.pos.first--;
+            pd.dir = IZQUIERDA;
+        }
+    }
+}
+
+Evento _hagoEventoConAccionYPosYDir(Accion a, PosYDir &pd){
+    if(a != DISPARAR && a != ESPERAR){
+        _aplicarMover(a, pd);
+    }
+}
+
+list< Evento > ExtremeExorcism::_armoListaDeEventos(list< Accion > acciones, PosYDir pd){
+    list< Evento > res;
+    for(auto a : acciones){
+        Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd); // pd es pasado por referencia, se actualiza al nuevo valor
+    }
+}
 // end Funciones Privadas
 
 // Start Funciones Publicas
@@ -30,7 +67,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     }
     _revivirTodosLosJugadores();
 
-    Fantasma nuevoFantasma;
+    Fantasma nuevoFantasma = _armoListaDeEventos(acciones_fantasma, f_init);
     // TODO Crear eventos
     infoFantasmaPriv info;
     info.vivo = NULL;

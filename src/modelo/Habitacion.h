@@ -15,7 +15,7 @@ public:
 
     unsigned int tam() const;
 
-    bool ocupado(Pos) const;
+    bool posValida(Pos) const;
 
     bool operator==(const Habitacion&) const;
 

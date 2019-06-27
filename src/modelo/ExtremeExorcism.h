@@ -83,6 +83,9 @@ private:
 
   void _losDemasJugadoresEsperan(Jugador j);
   void _revivirTodosLosJugadores();
+  list< Evento > _armoListaDeEventos(list< Accion > acciones, PosYDir pd);
+  Evento _hagoEventoConAccionYPosYDir(Accion a, PosYDir pd);
+  void _aplicarMover(Accion a, PosYDir pd);
 
 };
 
