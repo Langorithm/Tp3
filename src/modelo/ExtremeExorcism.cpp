@@ -15,35 +15,37 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
         itPublico++;
     }
 }
+
+void ExtremeExorcism::_revivirTodosLosJugadores(){
+    // Completar
+}
 // end Funciones Privadas
 
 // Start Funciones Publicas
 
 ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
                 list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h) {
-    // inicializar todas las estructuras privadas
-
-    // fantasma PrimerFantasma = hacer un fantasma a partir del contexto y meterlo en _fvPriv y Pub
-    //fantasma inicial = hagoFantasma(acciones_fantasma, f_init);
-
     for (auto j : jugadores){
-        infoJugadorPriv jPriv; // Hago al jugador privado
-        infoJugadorPriv* jPriv_ptr = &jPriv; // Hago el pointer a donde esta la infoPriv del jugador
-        list < Evento > vacia; // inicializo las acciones;
-        jPriv.acciones = vacia; // meto las acciones en la infoPriv del jugador
-
-        _jugadores.at(j) = jPriv_ptr;
-        _jvPriv.push_back(jPriv);
-        // _jvPub.push_back(); meter en esto la posicion inicial y la posicion siguiente
-        // Problema posible: el pointer apunta a la informacion del jugador directamente, no al nodo del contenedo
-        // Esto puede resultarnos en no poder eliminar el nodo de la lista en O(1), ver si rompe complejidad
-        // Segundo Problema: Como la funcion ejecutarAccion() toma el evento pasado del jugador, deberiamos pushear
-        // como primer Evento un evento (posInicial, dirInicial, ESPERAR).
-
-        // No uso _revivirTodosLosJugadores pues es necesario que cuando llamo al significado del trie con at(clave),
-        // pueda en el momento asignarle la clave, que es del tipo puntero(infoPriv)
+        _jugadores[j] = NULL;
     }
-    // Usando contexto defino las posiciones y direcciones de los jugadores
+    _revivirTodosLosJugadores();
+
+    Fantasma nuevoFantasma;
+    // TODO Crear eventos
+    infoFantasmaPriv info;
+    info.vivo = NULL;
+    info.f = nuevoFantasma;
+    _fvPriv.push_back(info);
+    _fvPub.push_back(f_init);
+    _fantasmas.insert(nuevoFantasma);
+
+    for(int i=0; i<h.tam(); i++){
+        vector<bool> col;
+        for(int j=0; j<h.tam(); j++)
+            col.push_back(false);
+        _matrizDisparos.push_back(col);
+    }
+
 };
 
 
@@ -115,7 +117,7 @@ list<PosYDir> ExtremeExorcism::posicionFantasmas() const {
 
 PosYDir ExtremeExorcism::posicionEspecial() const {
     infoFantasmaPriv fPriv = _fvPriv.front();
-    infoFantasmaPub* fPub = fPriv.vivo;
+    PosYDir* fPub = fPriv.vivo;
     Pos posicion = fPub->pos;
     Dir direccion = fPub->dir;
     return PosYDir(posicion,direccion);

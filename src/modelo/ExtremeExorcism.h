@@ -58,13 +58,9 @@ private:
     struct infoJugadorPriv{
         list<Evento> acciones;
     };
-    struct infoFantasmaPub{
-        Pos pos;
-        Dir dir;
-    };
     struct infoFantasmaPriv{
         Fantasma f;
-        infoFantasmaPub* vivo;
+        PosYDir* vivo;
     };
 
   list< infoJugadorPub > _jvPub;
@@ -73,7 +69,7 @@ private:
   string_map<infoJugadorPriv*> _jugadores;
 
   list< infoFantasmaPriv > _fvPriv;
-  list< infoFantasmaPub > _fvPub;
+  list< PosYDir > _fvPub;
 
   algo2::linear_set<Fantasma> _fantasmas;
 
@@ -86,6 +82,7 @@ private:
   // Funciones Privadas
 
   void _losDemasJugadoresEsperan(Jugador j);
+  void _revivirTodosLosJugadores();
 
 };
 

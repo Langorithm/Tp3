@@ -106,3 +106,10 @@ template <typename T>
 bool string_map<T>::empty() const{
     return !raiz;
 }
+
+template <typename T>
+algo2::linear_set<string> string_map<T>::claves() const {
+    algo2::linear_set<string> res;
+    clavesRecursiva(raiz, res, "");
+    return res;
+};
