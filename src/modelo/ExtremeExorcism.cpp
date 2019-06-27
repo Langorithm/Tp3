@@ -134,7 +134,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 
 
 void ExtremeExorcism::pasar(){
-    // Es la funcion en donde avanzan todos los fantasmas
+
     _cantidadPasos++;
 };
 
@@ -187,7 +187,7 @@ list<PosYDir> ExtremeExorcism::posicionFantasmas() const {
             PosYDir posYDirFantasma = PosYDir(f.vivo->pos,f.vivo->dir);
             posicionesFantasmas.push_back(posYDirFantasma);
         }
-    } // Esto depende de que eliminemos el nodo de _fvPub y dejemos el puntero de _fvPriv en NULL cada vez que muera
+    } // Esto funciona si eliminamos el nodo de _fvPub y dejamos el puntero de _fvPriv en NULL cada vez que muera
       // un fantasma.
 };
 
@@ -202,22 +202,27 @@ PosYDir ExtremeExorcism::posicionEspecial() const {
 
 
 list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
-    // COMPLETAR
+    list<PosYDir> res;
+    auto fanPub = _fvPub.begin();
+    for(auto fanPriv : _fvPriv){
+        //Evento evento_fantasma = _dame
+        fanPub++;
+    }
 };
 
 
 set<Pos> ExtremeExorcism::posicionesDisparadas() const {
-    // COMPLETAR
+    set<Pos> res;
+    list<PosYDir> disparos_fantasmas = disparosFantasmas();
+    for(auto disp : disparos_fantasmas){
+        res.emplace(disp);
+    }
+    return res;
 };
 
 
 bool ExtremeExorcism::jugadorVivo(Jugador j) const {
-    for(auto jug : _jvPub) {
-        if (j == jug.identificador) {
-            return true;
-        }
-    }
-    return false;
+    return _jugadores[j] != NULL;
 };
 
 
@@ -227,12 +232,22 @@ const Habitacion &ExtremeExorcism::habitacion() const {
 
 
 PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
-    // COMPLETAR
+    assert( _jugadores[j] != NULL);
+    for(auto jug : _jvPub){
+        if(jug.identificador == j){
+            return PosYDir(jug.pos,jug.dir);
+        }
+    }
 };
 
 
 const set<Jugador> &ExtremeExorcism::jugadores() const {
-    // COMPLETAR
+    set<Jugador> jugs;
+    for(auto j : _jugadores.claves()){
+        jugs.insert(j);
+    }
+    return jugs; // La IDE me dice: Reference to stack memory associated with local variable 'jugs' returned
+    // Deberiamos poner los jugadores en el heap, no?
 };
 
 
