@@ -13,6 +13,8 @@ class Habitacion {
 public:
     Habitacion(unsigned int tam, set<Pos> ocupadas);
 
+    Habitacion();
+
     unsigned int tam() const;
 
     bool ocupado(Pos) const;
