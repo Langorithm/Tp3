@@ -44,16 +44,27 @@ void ExtremeExorcism::_aplicarMover(Accion a, PosYDir &pd){
     }
 }
 
-Evento _hagoEventoConAccionYPosYDir(Accion a, PosYDir &pd){
+Evento ExtremeExorcism::_hagoEventoConAccionYPosYDir(Accion a, PosYDir &pd){
     if(a != DISPARAR && a != ESPERAR){
+
         _aplicarMover(a, pd);
+        return Evento(pd.pos,pd.dir,false);
+
+    } else if(a == DISPARAR){
+
+        return  Evento(pd.pos,pd.dir,true);
+
+    } else if(a == ESPERAR){
+
+        return  Evento(pd.pos,pd.dir,false);
     }
 }
 
 list< Evento > ExtremeExorcism::_armoListaDeEventos(list< Accion > acciones, PosYDir pd){
     list< Evento > res;
     for(auto a : acciones){
-        Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd); // pd es pasado por referencia, se actualiza al nuevo valor
+        Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd); // pd es pasado por referencia y actualizado
+        res.push_back(evento_nuevo);
     }
 }
 // end Funciones Privadas
