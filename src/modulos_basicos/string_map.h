@@ -147,7 +147,7 @@ private:
         for(int i=0; i<=255; i++){
             if(nodo->siguientes[i]){
                 key.push_back(i);
-                clavesRecursiva(nodo->hijos[i], claves, key);
+                clavesRecursiva(nodo->siguientes[i], claves, key);
             }
         }
     }

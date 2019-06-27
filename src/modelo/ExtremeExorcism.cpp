@@ -17,7 +17,23 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
 }
 
 void ExtremeExorcism::_revivirTodosLosJugadores(){
-    // Completar
+
+    _jvPriv.erase(_jvPriv.begin(), _jvPriv.end());
+    _jvPub.erase(_jvPub.begin(), _jvPub.end());
+
+    for(auto j : _jugadores.claves()){
+        infoJugadorPriv jPriv;
+        infoJugadorPriv* jPriv_ptr = &jPriv;
+
+
+        infoJugadorPub jPub;
+        // uso contexto para meter pos, dir e identificador en jPub
+
+        _jugadores[j] = jPriv_ptr;
+
+        _jvPriv.push_back(jPriv);
+        _jvPub.push_back(jPub);
+    }
 }
 
 void ExtremeExorcism::_aplicarMover(Accion a, PosYDir &pd){
@@ -60,7 +76,7 @@ Evento ExtremeExorcism::_hagoEventoConAccionYPosYDir(Accion a, PosYDir &pd){
     }
 }
 
-list< Evento > ExtremeExorcism::_armoListaDeEventos(list< Accion > &acciones, PosYDir pd){
+list< Evento > ExtremeExorcism::_armoListaDeEventos(const list< Accion > &acciones, PosYDir pd){
     list< Evento > res;
     for(auto a : acciones){
         Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd); // pd es pasado por referencia y actualizado
@@ -68,7 +84,7 @@ list< Evento > ExtremeExorcism::_armoListaDeEventos(list< Accion > &acciones, Po
     }
 }
 
-void ExtremeExorcism::_creoFantasmaYLoHagoVivir(list< Accion > acciones, PosYDir pd){
+Fantasma ExtremeExorcism::_creoFantasmaYLoHagoVivir(const list< Accion > &acciones, PosYDir pd){
 
     PosYDir posDir_original = pd;
     PosYDir* ptr_fPub;
@@ -83,28 +99,36 @@ void ExtremeExorcism::_creoFantasmaYLoHagoVivir(list< Accion > acciones, PosYDir
     _fvPriv.push_back(info);
     _fvPub.push_back(posDir_original);
     _fantasmas.insert(fantasma);
+
+    return fantasma;
 }
-// end Funciones Privadas
 
-// Start Funciones Publicas
-
-ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
-                list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h) {
-    for (auto j : jugadores){
-        _jugadores[j] = NULL;
-    }
-    _revivirTodosLosJugadores();
-
-    _creoFantasmaYLoHagoVivir(acciones_fantasma, f_init);
-    // TODO Crear eventos
-
-
+void ExtremeExorcism::_limpiarMatrizDisparos(const Habitacion &h){
     for(int i=0; i<h.tam(); i++){
         vector<bool> col;
         for(int j=0; j<h.tam(); j++)
             col.push_back(false);
         _matrizDisparos.push_back(col);
     }
+}
+// end Funciones Privadas
+
+// Start Funciones Publicas
+
+ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
+                list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h), _cantidadPasos(0) , _fantasmas(){
+
+    for (auto j : jugadores){
+        _jugadores[j] = NULL;
+    }
+    _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
+
+    Fantasma primerFantasma = _creoFantasmaYLoHagoVivir(acciones_fantasma, f_init);
+    _fantasmas.fast_insert(primerFantasma);
+
+    _limpiarMatrizDisparos(h);
+
+    _cantidadPasos = 0;
 
 };
 
@@ -116,35 +140,26 @@ void ExtremeExorcism::pasar(){
 
 
 void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
-    _cantidadPasos = 0;
-    infoJugadorPriv* jPriv = _jugadores.at(j); // O(#jv)
-    assert(jPriv != NULL);  // El jugador tiene que estar vivo!
-    Evento evento_anterior = jPriv->acciones.back(); // Encuentro su ultimo evento
-    Evento evento_nuevo = evento_anterior; // Preparo el evento que voy a meter en su lista de acciones
-    if (a == DISPARAR){ // esDisparo?(a)
-        evento_nuevo.dispara = true;
+    // Actualizo los datos del jugador, hay que ver si vive o muere, pues no lo tuve en cuenta.
+    // todo lo que sigue podriamos hacerlo en una funcion aparte
 
-            // if _matar_fantasmas(evento_nuevo.pos, evento_nuevo.pos) then nuevaROnda
-    } else if( a != DISPARAR && a != ESPERAR ){ // esMover?(a)
-        Pos nuevaPosicion = evento_anterior.pos;
-        Dir nuevaDireccion = evento_anterior.dir;
-        if(0){ // hayVecinoLibre(avanzarCasillero(pos, dir)) then nuevaPosicion = avanzarCasillero, same with nuevaDir
-              // Propongo hacer la funcion privada hayVecinoLibre en la clase ExtremeExorcism.
+    infoJugadorPriv* jPriv = _jugadores[j];
+
+    assert(jPriv != NULL);  // El jugador tiene que estar vivo!
+
+    PosYDir nuevaPosYDir = jPriv->acciones.back().pos_y_dir();
+    // Esto de buscar pd en jPriv solo lo podemos hacer cuando ya avanzó por lo menos una vez.
+    // Se puede resolver colocando un evento esperar cuando revivimos los jugadores,
+    // y despues no darle bola para otra cosa que no sea esta función.
+    // O la otra es buscar la pos y la dir en _jvPub siempre, total al revivirlos vamos a inicializarlas en jvPub.
+    Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, nuevaPosYDir);
+
+        for(auto i : _jvPub) {
+            if (i.identificador == j)
+                i.dir = evento_nuevo.dir;
+            i.pos = evento_nuevo.pos;
         }
-        // Ademas, falta la logica en donde al moverse el jugador en este paso muere.
-        // En el caso en que muera, no deberiamos permitir que el flow del programa siga su rumbo
-        evento_nuevo.pos = nuevaPosicion; //(nuevaPosicion, nuevaDireccion, false)
-        evento_nuevo.dir = nuevaDireccion;
-        evento_nuevo.dispara = false;
-        // Actualizamos la pos y dir del jugador en la lista publica
-        for(auto i : _jvPub){
-            if(i.identificador == j)
-                i.dir = nuevaDireccion;
-                i.pos = nuevaPosicion;
-        }
-    } else if(a == ESPERAR){ //esEsperar(a)
-        evento_nuevo.dispara = false;
-    }
+
     jPriv->acciones.push_back(evento_nuevo);
      _losDemasJugadoresEsperan(j);
      pasar(); // La funcion en donde se mueven todos los fantasmas
