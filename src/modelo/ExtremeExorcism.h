@@ -90,6 +90,7 @@ private:
   void _limpiarMatrizDisparos(const Habitacion &h);
   Evento _dameEvento(const list<Evento> &eventos, const int cantPasos);
   Evento _iesimo(const list<Evento> &eventos, int indice);
+  Pos _avanzar(Pos, Dir);
 
 };
 

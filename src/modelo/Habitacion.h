@@ -17,6 +17,7 @@ public:
 
     bool posValida(Pos) const;
 
+    bool proxima_posValida(Pos, Dir);
     bool ocupado(Pos) const;
 
     bool operator==(const Habitacion&) const;

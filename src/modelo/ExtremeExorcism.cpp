@@ -39,22 +39,22 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
 
 void ExtremeExorcism::_aplicarMover(Accion a, PosYDir &pd){
     if(a == MABAJO){
-        if((_hab.posValida(pd.pos))){
+        if((_hab.proxima_posValida(pd.pos, ABAJO))){
            pd.pos.second++;
            pd.dir = ABAJO;
         }
     } else if(a == MARRIBA){
-        if((_hab.posValida(pd.pos))){
+        if((_hab.proxima_posValida(pd.pos, ARRIBA))){
             pd.pos.second--;
             pd.dir = ARRIBA;
         }
     } else if(a == MDERECHA){
-        if((_hab.posValida(pd.pos))){
+        if((_hab.proxima_posValida(pd.pos, DERECHA))){
             pd.pos.first++;
             pd.dir = DERECHA;
         }
     } else if(a == MIZQUIERDA){
-        if((_hab.posValida(pd.pos))){
+        if((_hab.proxima_posValida(pd.pos, IZQUIERDA))){
             pd.pos.first--;
             pd.dir = IZQUIERDA;
         }
@@ -134,9 +134,25 @@ Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantP
         return _iesimo(eventos, indice);
     }
 }
-//--------------------------------------- end Funciones Privadas
 
-// Start Funciones Publicas
+Pos ExtremeExorcism::_avanzar(Pos pos, Dir dir){
+    if(dir == ABAJO){
+        pos.second--;
+
+    } else if(dir == ARRIBA) {
+        pos.second++;
+
+    } else if(dir == DERECHA){
+        pos.first++;
+
+    } else if(dir == IZQUIERDA){
+        pos.first--;
+    }
+    return pos;
+}
+//--------------------------------------- End Funciones Privadas
+
+// -------------------------------------- Start Funciones Publicas
 
 ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
                 list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h), _cantidadPasos(0) , _fantasmas(){
@@ -157,7 +173,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 
 
 void ExtremeExorcism::pasar(){
-    
+
     _cantidadPasos++;
 };
 
@@ -225,13 +241,27 @@ PosYDir ExtremeExorcism::posicionEspecial() const {
 
 
 list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
+
     list<PosYDir> res;
+
     auto fanPub = _fvPub.begin();
     for(auto fanPriv : _fvPriv){
+
         Evento evento_fantasma = _dameEvento(fanPriv.f, _cantidadPasos);
+        PosYDir pd = evento_fantasma.pos_y_dir();
+
+        if(evento_fantasma.dispara){
+
+            while(_hab.proxima_posValida(pd.pos,pd.dir)){
+                pd.pos = _avanzar(pd.pos, pd.dir);
+                res.push_back(pd);
+            }
+
+        }
+
         fanPub++;
     }
-};
+}
 
 
 set<Pos> ExtremeExorcism::posicionesDisparadas() const {
