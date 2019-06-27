@@ -64,37 +64,29 @@ private:
     };
     struct infoFantasmaPriv{
         Fantasma f;
-        infoFantasmaPub** vivo;
+        infoFantasmaPub* vivo;
     };
 
   list< infoJugadorPub > _jvPub;
-
   list< infoJugadorPriv > _jvPriv;
 
   string_map _jugadores;
 
   list< infoFantasmaPriv > _fvPriv;
   list< infoFantasmaPub > _fvPub;
+
   algo2::linear_set _fantasmas;
+
   Habitacion _hab;
+
   vector< vector<bool> > _matrizDisparos;
-  int _cantidad_Pasos;
 
-  // Funciones
+  int _cantidadPasos;
 
-  void _losDemasJugadoresEsperan(Jugador j){
-      list< infoJugadorPub >::iterator itPublico = begin(_jvPub);
-      for(auto jug : _jvPriv){
+  // Funciones Privadas
 
-          if( itPublico->identificador != j) {
+  void _losDemasJugadoresEsperan(Jugador j);
 
-              Evento evento_anterior = jug.acciones.back();
-              Evento evento_nuevo = Evento(evento_anterior.pos, evento_anterior.dir, false);
-              jug.acciones.push_back(evento_nuevo);
-          }
-          itPublico++;
-      }
-  }
 };
 
 #endif
