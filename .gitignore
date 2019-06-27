@@ -6,3 +6,5 @@ Makefile
 *.a
 correrTests
 bin
+.idea
+cmake-build-debug
