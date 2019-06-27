@@ -1,7 +1,8 @@
+#include <assert.h>
 #include "ExtremeExorcism.h"
 // Start Funciones Privadas
 
-void _losDemasJugadoresEsperan(Jugador j){
+void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     list< infoJugadorPub >::iterator itPublico = begin(_jvPub);
     for(auto jug : _jvPriv){
 
@@ -19,28 +20,12 @@ void _losDemasJugadoresEsperan(Jugador j){
 // Start Funciones Publicas
 
 ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
-                list<Accion> acciones_fantasma, Contexto *ctx){
+                list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h) {
     // inicializar todas las estructuras privadas
-
-    _hab = h;
-
-    _fantasmas = linear_set();
-
-    list< infoFantasmaPub > fantPub;
-    list< infoFantasmaPriv > fantPriv;
-    _fvPriv = fantPriv;
-    _fvPub = fantPub;
-
-    list< infoJugadorPub > jugPub;
-    list< infoJugadorPriv > jugPriv;
-
-    _jvPriv = jugPriv;
-    _jvPub = jugPub;
 
     // fantasma PrimerFantasma = hacer un fantasma a partir del contexto y meterlo en _fvPriv y Pub
     //fantasma inicial = hagoFantasma(acciones_fantasma, f_init);
 
-    _jugadores = string_map();
     for (auto j : jugadores){
         infoJugadorPriv jPriv; // Hago al jugador privado
         infoJugadorPriv* jPriv_ptr = &jPriv; // Hago el pointer a donde esta la infoPriv del jugador
@@ -70,8 +55,9 @@ void ExtremeExorcism::pasar(){
 
 void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     _cantidadPasos = 0;
-    infoJugadorPriv jPriv = _jugadores.at(j); // encuentro el jugador en _jvPriv O(#jv)
-    Evento evento_anterior = jPriv.acciones.back(); // Encuentro su ultimo evento
+    infoJugadorPriv* jPriv = _jugadores.at(j); // O(#jv)
+    assert(jPriv != NULL);  // El jugador tiene que estar vivo!
+    Evento evento_anterior = jPriv->acciones.back(); // Encuentro su ultimo evento
     Evento evento_nuevo = evento_anterior; // Preparo el evento que voy a meter en su lista de acciones
     if (a == DISPARAR){ // esDisparo?(a)
         evento_nuevo.dispara = true;
@@ -80,7 +66,7 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     } else if( a != DISPARAR && a != ESPERAR ){ // esMover?(a)
         Pos nuevaPosicion = evento_anterior.pos;
         Dir nuevaDireccion = evento_anterior.dir;
-        if(){ // hayVecinoLibre(avanzarCasillero(pos, dir)) then nuevaPosicion = avanzarCasillero, same with nuevaDir
+        if(0){ // hayVecinoLibre(avanzarCasillero(pos, dir)) then nuevaPosicion = avanzarCasillero, same with nuevaDir
               // Propongo hacer la funcion privada hayVecinoLibre en la clase ExtremeExorcism.
         }
         // Ademas, falta la logica en donde al moverse el jugador en este paso muere.
@@ -97,7 +83,7 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     } else if(a == ESPERAR){ //esEsperar(a)
         evento_nuevo.dispara = false;
     }
-    jPriv.acciones.push_back(evento_nuevo);
+    jPriv->acciones.push_back(evento_nuevo);
      _losDemasJugadoresEsperan(j);
      pasar(); // La funcion en donde se mueven todos los fantasmas
 };
@@ -107,7 +93,7 @@ list<pair<Jugador, PosYDir>> ExtremeExorcism::posicionJugadores() const {
     list<pair<Jugador, PosYDir>> res;
     for( auto j : _jvPub){
         PosYDir posicionYDireccion = PosYDir(j.pos,j.dir);
-        pair<Jugador, PosYDir> id_PosYDir = pair(j.identificador,posicionYDireccion);
+        pair<Jugador, PosYDir> id_PosYDir = make_pair(j.identificador,posicionYDireccion);
 
         res.push_back(id_PosYDir);
     }

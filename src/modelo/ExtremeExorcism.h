@@ -70,12 +70,12 @@ private:
   list< infoJugadorPub > _jvPub;
   list< infoJugadorPriv > _jvPriv;
 
-  string_map _jugadores;
+  string_map<infoJugadorPriv*> _jugadores;
 
   list< infoFantasmaPriv > _fvPriv;
   list< infoFantasmaPub > _fvPub;
 
-  algo2::linear_set _fantasmas;
+  algo2::linear_set<Fantasma> _fantasmas;
 
   Habitacion _hab;
 
