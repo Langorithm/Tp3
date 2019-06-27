@@ -60,12 +60,29 @@ Evento ExtremeExorcism::_hagoEventoConAccionYPosYDir(Accion a, PosYDir &pd){
     }
 }
 
-list< Evento > ExtremeExorcism::_armoListaDeEventos(list< Accion > acciones, PosYDir pd){
+list< Evento > ExtremeExorcism::_armoListaDeEventos(list< Accion > &acciones, PosYDir pd){
     list< Evento > res;
     for(auto a : acciones){
         Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd); // pd es pasado por referencia y actualizado
         res.push_back(evento_nuevo);
     }
+}
+
+void ExtremeExorcism::_creoFantasmaYLoHagoVivir(list< Accion > acciones, PosYDir pd){
+
+    PosYDir posDir_original = pd;
+    PosYDir* ptr_fPub;
+    ptr_fPub = &posDir_original;
+
+    Fantasma fantasma = _armoListaDeEventos(acciones, pd);
+
+    infoFantasmaPriv info;
+    info.vivo = ptr_fPub;
+    info.f = fantasma;
+
+    _fvPriv.push_back(info);
+    _fvPub.push_back(posDir_original);
+    _fantasmas.insert(fantasma);
 }
 // end Funciones Privadas
 
@@ -78,14 +95,9 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     }
     _revivirTodosLosJugadores();
 
-    Fantasma nuevoFantasma = _armoListaDeEventos(acciones_fantasma, f_init);
+    _creoFantasmaYLoHagoVivir(acciones_fantasma, f_init);
     // TODO Crear eventos
-    infoFantasmaPriv info;
-    info.vivo = NULL;
-    info.f = nuevoFantasma;
-    _fvPriv.push_back(info);
-    _fvPub.push_back(f_init);
-    _fantasmas.insert(nuevoFantasma);
+
 
     for(int i=0; i<h.tam(); i++){
         vector<bool> col;
