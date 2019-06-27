@@ -305,5 +305,9 @@ const set<Jugador> &ExtremeExorcism::jugadores() const {
 
 
 const list<Fantasma> &ExtremeExorcism::fantasmas() const {
-    // COMPLETAR
+    list<Fantasma> res;
+    for(auto f : _fantasmas){
+        res.push_back(f);
+    }
+    return res;
 };
