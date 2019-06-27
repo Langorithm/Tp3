@@ -153,15 +153,17 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     // y despues no darle bola para otra cosa que no sea esta función.
     // O la otra es buscar la pos y la dir en _jvPub siempre, total al revivirlos vamos a inicializarlas en jvPub.
     Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, nuevaPosYDir);
+    jPriv->acciones.push_back(evento_nuevo);
 
-        for(auto i : _jvPub) {
+        for(auto i : _jvPub) { // Modifico j en jvPub
             if (i.identificador == j)
                 i.dir = evento_nuevo.dir;
             i.pos = evento_nuevo.pos;
         }
 
-    jPriv->acciones.push_back(evento_nuevo);
      _losDemasJugadoresEsperan(j);
+    // Lo mismo que discutimos arriba de como obtener pos y dir se aplica para esta losDemasJugadoresEsperan
+
      pasar(); // La funcion en donde se mueven todos los fantasmas
 };
 
