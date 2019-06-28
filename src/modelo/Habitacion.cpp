@@ -85,8 +85,7 @@ bool Habitacion::posValida(Pos pos) const {
     return pos.first >= 0 &&
         pos.first < tam() &&
         pos.second >= 0 &&
-        pos.second < tam() &&
-	    !matriz[pos.first][pos.second];
+        pos.second < tam();
 };
 
 bool Habitacion::proxima_posValida(Pos pos, Dir dir) const{
@@ -99,15 +98,12 @@ bool Habitacion::proxima_posValida(Pos pos, Dir dir) const{
     } else if(dir == IZQUIERDA){
         pos.second--;
     }
-    return posValida(pos);
+    return posValida(pos) && !ocupado(pos);
 }
 
 bool Habitacion::ocupado(Pos pos) const {
-    return pos.first >= 0 &&
-           pos.first < tam() &&
-           pos.second >= 0 &&
-           pos.second < tam() &&
-           matriz[pos.first][pos.second];
+    assert(posValida(pos));
+    return matriz[pos.first][pos.second];
 };
 
 bool Habitacion::operator==(const Habitacion& hab2) const{
