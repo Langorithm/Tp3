@@ -24,15 +24,12 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
 
     for(auto j : _jugadores.claves()){
         infoJugadorPriv jPriv;
-        infoJugadorPriv* jPriv_ptr = &jPriv;
-
-
         infoJugadorPub jPub;
         // uso contexto para meter pos, dir e identificador en jPub
 
-        _jugadores[j] = jPriv_ptr;
-
         _jvPriv.push_back(jPriv);
+        _jugadores[j] = &_jvPriv.back();
+
         _jvPub.push_back(jPub);
     }
 }
