@@ -113,7 +113,7 @@ void ExtremeExorcism::_limpiarMatrizDisparos(const Habitacion &h){
     }
 }
 
-Evento ExtremeExorcism::_iesimo(const list<Evento> &eventos, int indice){
+Evento ExtremeExorcism::_iesimo(const list<Evento> &eventos, int indice) const{
     int i = 0;
     for(auto e : eventos){
         if(i == indice){
@@ -135,7 +135,7 @@ Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantP
     }
 }
 
-Pos ExtremeExorcism::_avanzar(Pos pos, Dir dir){
+Pos ExtremeExorcism::_avanzar(Pos pos, Dir dir) const{
     if(dir == ABAJO){
         pos.second--;
 
@@ -268,14 +268,14 @@ set<Pos> ExtremeExorcism::posicionesDisparadas() const {
     set<Pos> res;
     list<PosYDir> disparos_fantasmas = disparosFantasmas();
     for(auto disp : disparos_fantasmas){
-        res.emplace(disp);
+        res.emplace(disp.pos);
     }
     return res;
 };
 
 
 bool ExtremeExorcism::jugadorVivo(Jugador j) const {
-    return _jugadores[j] != NULL;
+    return _jugadores.at(j) != NULL;
 };
 
 
@@ -285,7 +285,7 @@ const Habitacion &ExtremeExorcism::habitacion() const {
 
 
 PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
-    assert( _jugadores[j] != NULL);
+    assert( _jugadores.at(j) != NULL);
     for(auto jug : _jvPub){
         if(jug.identificador == j){
             return PosYDir(jug.pos,jug.dir);

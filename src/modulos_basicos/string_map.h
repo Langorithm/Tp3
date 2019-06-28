@@ -138,7 +138,7 @@ private:
     void clavesRecursiva(
             Nodo *nodo,
             algo2::linear_set<string>& claves,
-            string key)
+            string key) const
     {
         if(!nodo)
             return;

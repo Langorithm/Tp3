@@ -89,8 +89,8 @@ private:
   Fantasma _creoFantasmaYLoHagoVivir(const list< Accion > &acciones, PosYDir pd);
   void _limpiarMatrizDisparos(const Habitacion &h);
   Evento _dameEvento(const list<Evento> &eventos, const int cantPasos) const;
-  Evento _iesimo(const list<Evento> &eventos, int indice);
-  Pos _avanzar(Pos, Dir);
+  Evento _iesimo(const list<Evento> &eventos, int indice) const;
+  Pos _avanzar(Pos, Dir) const;
 
 };
 
