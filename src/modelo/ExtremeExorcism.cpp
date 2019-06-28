@@ -294,17 +294,16 @@ PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
 };
 
 
-const set<Jugador> &ExtremeExorcism::jugadores() const {
+const set<Jugador> ExtremeExorcism::jugadores() const {
     set<Jugador> jugs;
     for(auto j : _jugadores.claves()){
         jugs.insert(j);
     }
-    return jugs; // La IDE me dice: Reference to stack memory associated with local variable 'jugs' returned
-    // Deberiamos poner los jugadores en el heap, no?
+    return jugs;
 };
 
 
-const list<Fantasma> &ExtremeExorcism::fantasmas() const {
+const list<Fantasma> ExtremeExorcism::fantasmas() const {
     list<Fantasma> res;
     for(auto f : _fantasmas){
         res.push_back(f);

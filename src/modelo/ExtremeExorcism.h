@@ -42,9 +42,9 @@ public:
 
   PosYDir posicionJugador(Jugador j) const;
 
-  const set<Jugador> &jugadores() const;
+  const set<Jugador> jugadores() const;
 
-  const list<Fantasma> &fantasmas() const;
+  const list<Fantasma> fantasmas() const;
 
 private:
   // Empiezo por declarar todas las estructuras que estan en la representacion del modulo juego.md del tp2
