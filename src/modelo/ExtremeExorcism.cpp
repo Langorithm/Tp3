@@ -124,7 +124,7 @@ Evento ExtremeExorcism::_iesimo(const list<Evento> &eventos, int indice){
 }
 
 // Sospecho error by one
-Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantPasos){
+Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantPasos) const{
     int tamano = eventos.size();
     int indice = cantPasos % (tamano * 2);
     if(indice < tamano){

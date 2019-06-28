@@ -89,7 +89,7 @@ bool Habitacion::posValida(Pos pos) const {
 	    !matriz[pos.first][pos.second];
 };
 
-bool Habitacion::proxima_posValida(Pos pos, Dir dir){
+bool Habitacion::proxima_posValida(Pos pos, Dir dir) const{
     if(dir == ABAJO){
         pos.second--;
     } else if(dir == ARRIBA){
