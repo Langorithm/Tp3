@@ -62,7 +62,7 @@ const T& string_map<T>::at(const string& clave) const {
     Nodo *nodo = raiz;
     for(int i=0; i<clave.length(); i++)
         nodo = nodo->siguientes[int(clave[i])];
-    return nodo->definicion;
+    return *(nodo->definicion);
 }
 
 template <typename T>
