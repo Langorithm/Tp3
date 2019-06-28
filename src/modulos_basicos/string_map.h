@@ -142,12 +142,14 @@ private:
     {
         if(!nodo)
             return;
-        claves.insert(key);
+        if(nodo->definicion)
+            claves.insert(key);
 
         for(int i=0; i<=255; i++){
             if(nodo->siguientes[i]){
                 key.push_back(i);
                 clavesRecursiva(nodo->siguientes[i], claves, key);
+                key.pop_back();
             }
         }
     }
