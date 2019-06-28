@@ -80,22 +80,20 @@ list< Evento > ExtremeExorcism::_armoListaDeEventos(const list< Accion > &accion
         Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd); // pd es pasado por referencia y actualizado
         res.push_back(evento_nuevo);
     }
+    return res;
 }
 
 Fantasma ExtremeExorcism::_creoFantasmaYLoHagoVivir(const list< Accion > &acciones, PosYDir pd){
 
     PosYDir posDir_original = pd;
-    PosYDir* ptr_fPub;
-    ptr_fPub = &posDir_original;
 
     Fantasma fantasma = _armoListaDeEventos(acciones, pd);
 
-    infoFantasmaPriv info;
-    info.vivo = ptr_fPub;
-    info.f = fantasma;
-
-    _fvPriv.push_back(info);
     _fvPub.push_back(posDir_original);
+    infoFantasmaPriv info;
+    info.vivo = &_fvPub.back();
+    info.f = fantasma;
+    _fvPriv.push_back(info);
     _fantasmas.insert(fantasma);
 
     return fantasma;
@@ -225,6 +223,7 @@ list<PosYDir> ExtremeExorcism::posicionFantasmas() const {
         }
     } // Esto funciona si eliminamos el nodo de _fvPub y dejamos el puntero de _fvPriv en NULL cada vez que muera
       // un fantasma.
+    return posicionesFantasmas;
 };
 
 
