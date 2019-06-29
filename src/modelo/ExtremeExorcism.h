@@ -52,9 +52,7 @@ private:
 
     struct infoJugadorPriv{
         list<Evento> acciones;
-    };
-    struct infoFantasmaPriv{
-        Fantasma f;
+        // TODO agregar el vivo para que nos de bien la complejidad
     };
 
   list<pair<Jugador, PosYDir>> _jvPub;
@@ -62,7 +60,7 @@ private:
 
   string_map<infoJugadorPriv*> _jugadores;
 
-  list< infoFantasmaPriv > _fvPriv;
+  list< Fantasma > _fvPriv;
   list< PosYDir > _fvPub;
 
   algo2::linear_set<Fantasma> _fantasmas;

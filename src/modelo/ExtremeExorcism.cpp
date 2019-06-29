@@ -102,9 +102,7 @@ Fantasma ExtremeExorcism::_crearFantasmaYHacerloVivir(const list< Accion > &acci
     Fantasma fantasma = _armarListaDeEventos(acciones, pd);
 
     _fvPub.push_back(pd);
-    infoFantasmaPriv info;
-    info.f = fantasma;
-    _fvPriv.push_back(info);
+    _fvPriv.push_back(fantasma);
     _fantasmas.insert(fantasma);
 
     return fantasma;
@@ -234,7 +232,7 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
     auto fanPub = _fvPub.begin();
     for(auto fanPriv : _fvPriv){
 
-        Evento evento_fantasma = _dameEvento(fanPriv.f, _cantidadPasos);
+        Evento evento_fantasma = _dameEvento(fanPriv, _cantidadPasos);
         PosYDir pd = evento_fantasma.pos_y_dir();
 
         if(evento_fantasma.dispara){
