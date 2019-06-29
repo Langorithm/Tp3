@@ -185,12 +185,8 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
 
     assert(jPriv != NULL);  // El jugador tiene que estar vivo!
 
+    assert(jPriv->acciones.size() > 0);
     PosYDir nuevaPosYDir = jPriv->acciones.back().pos_y_dir();
-    // Esto de buscar pd en jPriv solo lo podemos hacer cuando ya avanzó por lo
-    // menos una vez.  Se puede resolver colocando un evento esperar cuando
-    // revivimos los jugadores, y despues no darle bola para otra cosa que no
-    // sea esta función.  O la otra es buscar la pos y la dir en _jvPub
-    // siempre, total al revivirlos vamos a inicializarlas en jvPub.
     Evento evento_nuevo = _crearEvento(a, nuevaPosYDir);
     jPriv->acciones.push_back(evento_nuevo);
 
@@ -201,8 +197,6 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     }
 
      _losDemasJugadoresEsperan(j);
-    // Lo mismo que discutimos arriba de como obtener pos y dir se aplica para
-    // esta losDemasJugadoresEsperan
 
      pasar(); // La funcion en donde se mueven todos los fantasmas
 };
