@@ -87,7 +87,7 @@ private:
   Evento _hacerEventoConAccionYPosYDir(Accion a, PosYDir pd);
   PosYDir _aplicarMover(Accion a, PosYDir pd);
   Fantasma _crearFantasmaYHacerloVivir(const list< Accion > &acciones, PosYDir pd);
-  void _limpiarMatrizDisparos(const Habitacion &h);
+  void _inicializarMatrizDisparos(const Habitacion &h);
   Evento _dameEvento(const list<Evento> &eventos, const int cantPasos) const;
   Pos _avanzar(Pos, Dir) const;
 
