@@ -5,11 +5,15 @@
 
 // Complejidad a Cumplir: O(?)
 // Complejidad Actual: O(#jv)
+// TODO La complejidad está mal, ver el comentario adentro
+// Quedaría O(#jv * max(|j|))
+// TODO Nota interesante: en la correción del TP2 no se dieron cuenta de que
+// estaba mal
 void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     list< pair<Jugador, PosYDir> >::iterator itPublico = begin(_jvPub);
     for(auto jug : _jvPriv){
 
-        if( itPublico->first != j) {  // Ojo con la complejidad de esto!
+        if( itPublico->first != j) {  // TODO Ojo con la complejidad de esto!
 
             Evento evento_anterior = jug.acciones.back();
             Evento evento_nuevo = Evento(evento_anterior.pos, evento_anterior.dir, false);
