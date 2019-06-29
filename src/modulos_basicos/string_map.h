@@ -2,7 +2,7 @@
 #define STRING_MAP_H_
 
 #include <string>
-#include <modulos_basicos/linear_set.h>
+#include <set>
 
 using namespace std;
 
@@ -74,7 +74,7 @@ public:
      * devuelve true si no hay ningún elemento en el diccionario */
     bool empty() const;
 
-    algo2::linear_set<string> claves() const;
+    std::set<string> claves() const;
 
 private:
 
@@ -137,7 +137,7 @@ private:
 
     void clavesRecursiva(
             Nodo *nodo,
-            algo2::linear_set<string>& claves,
+            std::set<string>& claves,
             string key) const
     {
         if(!nodo)

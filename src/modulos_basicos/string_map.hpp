@@ -108,8 +108,8 @@ bool string_map<T>::empty() const{
 }
 
 template <typename T>
-algo2::linear_set<string> string_map<T>::claves() const {
-    algo2::linear_set<string> res;
+std::set<string> string_map<T>::claves() const {
+    std::set<string> res;
     clavesRecursiva(raiz, res, "");
     return res;
 };
