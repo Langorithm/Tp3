@@ -190,10 +190,12 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     Evento evento_nuevo = _crearEvento(a, nuevaPosYDir);
     jPriv->acciones.push_back(evento_nuevo);
 
+    // TODO Usar el "vivo?" del diseño para que nos de la complejidad
     for(auto info : _jvPub) { // Modifico j en jvPub
-        if (info.first == j)
+        if (info.first == j){
             info.second.dir = evento_nuevo.dir;
-        info.second.pos = evento_nuevo.pos;
+            info.second.pos = evento_nuevo.pos;
+        }
     }
 
      _losDemasJugadoresEsperan(j);
