@@ -71,10 +71,12 @@ private:
 
   int _cantidadPasos;
 
+  Contexto *_ctx;
+
   // Funciones Privadas
 
   void _losDemasJugadoresEsperan(Jugador j);
-  void _revivirTodosLosJugadores(Contexto*);
+  void _revivirTodosLosJugadores();
   list< Evento > _armarListaDeEventos(const list< Accion > &, PosYDir);
   Evento _crearEvento(Accion a, PosYDir pd);
   PosYDir _aplicarMover(Accion a, PosYDir pd);
@@ -82,6 +84,10 @@ private:
   void _inicializarMatrizDisparos(const Habitacion &h);
   Evento _dameEvento(const list<Evento> &eventos, const int cantPasos) const;
   Pos _avanzar(Pos, Dir) const;
+  bool _matarFantasmas(PosYDir);
+  void _nuevaRonda(Fantasma);
+  void _regenerarFantasmas();
+  void _nuevoFantasmaEspecial(Fantasma);
 
 };
 

@@ -19,12 +19,12 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     }
 }
 
-void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
+void ExtremeExorcism::_revivirTodosLosJugadores(){
 
     _jvPriv.clear();
     _jvPub.clear();
 
-    map<Jugador, PosYDir> inicial = ctx->localizar_jugadores(
+    map<Jugador, PosYDir> inicial = _ctx->localizar_jugadores(
         _jugadores.claves(),
         fantasmas(),
         _hab
@@ -157,12 +157,12 @@ Pos ExtremeExorcism::_avanzar(Pos pos, Dir dir) const{
 // -------------------------------------- Start Funciones Publicas
 
 ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
-                list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h), _cantidadPasos(0) , _fantasmas(){
+                list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h), _cantidadPasos(0), _ctx(ctx){
 
     for (auto j : jugadores){
         _jugadores[j] = NULL;
     }
-    _revivirTodosLosJugadores(ctx); // Aca me encargo de meterlos en jvPriv, jvPub
+    _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
 
     Fantasma primerFantasma = _crearFantasmaYHacerloVivir(acciones_fantasma, f_init);
 
@@ -198,10 +198,39 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
         }
     }
 
+    if(a == DISPARAR && _matarFantasmas(evento_nuevo.pos_y_dir()))
+        // De todos los fantasmas que se mataron, uno de esos es el principal
+        _nuevaRonda(jPriv->acciones);
+
+
      _losDemasJugadoresEsperan(j);
 
      pasar(); // La funcion en donde se mueven todos los fantasmas
 };
+
+
+bool ExtremeExorcism::_matarFantasmas(PosYDir pd){
+    // TODO Completar
+    return false;
+}
+
+
+void ExtremeExorcism::_nuevaRonda(Fantasma f){
+    _cantidadPasos = 0;
+    _revivirTodosLosJugadores();
+    _regenerarFantasmas();
+    _nuevoFantasmaEspecial(f);
+}
+
+
+void ExtremeExorcism::_regenerarFantasmas(){
+    // TODO Completar
+}
+
+
+void ExtremeExorcism::_nuevoFantasmaEspecial(Fantasma f){
+    // TODO Completar
+}
 
 
 list<pair<Jugador, PosYDir>> ExtremeExorcism::posicionJugadores() const {
