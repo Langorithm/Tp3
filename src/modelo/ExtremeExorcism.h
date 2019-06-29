@@ -83,10 +83,10 @@ private:
 
   void _losDemasJugadoresEsperan(Jugador j);
   void _revivirTodosLosJugadores();
-  list< Evento > _armoListaDeEventos(const list< Accion > &, PosYDir);
-  Evento _hagoEventoConAccionYPosYDir(Accion a, PosYDir pd);
+  list< Evento > _armarListaDeEventos(const list< Accion > &, PosYDir);
+  Evento _hacerEventoConAccionYPosYDir(Accion a, PosYDir pd);
   PosYDir _aplicarMover(Accion a, PosYDir pd);
-  Fantasma _creoFantasmaYLoHagoVivir(const list< Accion > &acciones, PosYDir pd);
+  Fantasma _crearFantasmaYHacerloVivir(const list< Accion > &acciones, PosYDir pd);
   void _limpiarMatrizDisparos(const Habitacion &h);
   Evento _dameEvento(const list<Evento> &eventos, const int cantPasos) const;
   Evento _iesimo(const list<Evento> &eventos, int indice) const;

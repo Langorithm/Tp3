@@ -59,7 +59,7 @@ PosYDir ExtremeExorcism::_aplicarMover(Accion a, PosYDir pd){
     return pd;
 }
 
-Evento ExtremeExorcism::_hagoEventoConAccionYPosYDir(Accion a, PosYDir pd){
+Evento ExtremeExorcism::_hacerEventoConAccionYPosYDir(Accion a, PosYDir pd){
     if(a != DISPARAR && a != ESPERAR){
 
         PosYDir nuevaPd = _aplicarMover(a, pd);
@@ -75,20 +75,20 @@ Evento ExtremeExorcism::_hagoEventoConAccionYPosYDir(Accion a, PosYDir pd){
     }
 }
 
-list< Evento > ExtremeExorcism::_armoListaDeEventos(const list< Accion > &acciones, PosYDir pd){
+list< Evento > ExtremeExorcism::_armarListaDeEventos(const list< Accion > &acciones, PosYDir pd){
     list< Evento > res;
     for(auto a : acciones){
-        Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd);
+        Evento evento_nuevo = _hacerEventoConAccionYPosYDir(a, pd);
         res.push_back(evento_nuevo);
     }
     return res;
 }
 
-Fantasma ExtremeExorcism::_creoFantasmaYLoHagoVivir(const list< Accion > &acciones, PosYDir pd){
+Fantasma ExtremeExorcism::_crearFantasmaYHacerloVivir(const list< Accion > &acciones, PosYDir pd){
 
     PosYDir posDir_original = pd;
 
-    Fantasma fantasma = _armoListaDeEventos(acciones, pd);
+    Fantasma fantasma = _armarListaDeEventos(acciones, pd);
 
     _fvPub.push_back(posDir_original);
     infoFantasmaPriv info;
@@ -158,7 +158,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     }
     _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
 
-    Fantasma primerFantasma = _creoFantasmaYLoHagoVivir(acciones_fantasma, f_init);
+    Fantasma primerFantasma = _crearFantasmaYHacerloVivir(acciones_fantasma, f_init);
     _fantasmas.fast_insert(primerFantasma);
 
     _limpiarMatrizDisparos(h);
@@ -187,7 +187,7 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     // Se puede resolver colocando un evento esperar cuando revivimos los jugadores,
     // y despues no darle bola para otra cosa que no sea esta función.
     // O la otra es buscar la pos y la dir en _jvPub siempre, total al revivirlos vamos a inicializarlas en jvPub.
-    Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, nuevaPosYDir);
+    Evento evento_nuevo = _hacerEventoConAccionYPosYDir(a, nuevaPosYDir);
     jPriv->acciones.push_back(evento_nuevo);
 
         for(auto i : _jvPub) { // Modifico j en jvPub
