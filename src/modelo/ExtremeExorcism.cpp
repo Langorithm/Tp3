@@ -72,7 +72,7 @@ PosYDir ExtremeExorcism::_aplicarMover(Accion a, PosYDir pd){
     return pd;
 }
 
-Evento ExtremeExorcism::_hacerEventoConAccionYPosYDir(Accion a, PosYDir pd){
+Evento ExtremeExorcism::_crearEvento(Accion a, PosYDir pd){
     if(a == DISPARAR){
         return Evento(pd.pos,pd.dir,true);
     } else if(a == ESPERAR){
@@ -86,7 +86,7 @@ Evento ExtremeExorcism::_hacerEventoConAccionYPosYDir(Accion a, PosYDir pd){
 list< Evento > ExtremeExorcism::_armarListaDeEventos(const list< Accion > &acciones, PosYDir pd){
     list< Evento > res;
     for(auto a : acciones){
-        Evento evento_nuevo = _hacerEventoConAccionYPosYDir(a, pd);
+        Evento evento_nuevo = _crearEvento(a, pd);
         pd = evento_nuevo.pos_y_dir(); // Al quitar las referencias, falto actualizar la pos y la dir al nuevo valor
         res.push_back(evento_nuevo);
     }
@@ -191,7 +191,7 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     // revivimos los jugadores, y despues no darle bola para otra cosa que no
     // sea esta función.  O la otra es buscar la pos y la dir en _jvPub
     // siempre, total al revivirlos vamos a inicializarlas en jvPub.
-    Evento evento_nuevo = _hacerEventoConAccionYPosYDir(a, nuevaPosYDir);
+    Evento evento_nuevo = _crearEvento(a, nuevaPosYDir);
     jPriv->acciones.push_back(evento_nuevo);
 
     for(auto info : _jvPub) { // Modifico j en jvPub

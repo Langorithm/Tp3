@@ -76,7 +76,7 @@ private:
   void _losDemasJugadoresEsperan(Jugador j);
   void _revivirTodosLosJugadores(Contexto*);
   list< Evento > _armarListaDeEventos(const list< Accion > &, PosYDir);
-  Evento _hacerEventoConAccionYPosYDir(Accion a, PosYDir pd);
+  Evento _crearEvento(Accion a, PosYDir pd);
   PosYDir _aplicarMover(Accion a, PosYDir pd);
   Fantasma _crearFantasmaYHacerloVivir(const list< Accion > &acciones, PosYDir pd);
   void _inicializarMatrizDisparos(const Habitacion &h);
