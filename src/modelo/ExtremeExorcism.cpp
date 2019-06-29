@@ -36,7 +36,7 @@ void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
         infoJugadorPriv jPriv;
         infoJugadorPub jPub;
 
-        PosYDir pd = inicial[j];
+        PosYDir pd = inicial.at(j);
         jPub.pos = pd.pos;
         jPub.dir = pd.dir;
         jPub.identificador = j;
@@ -93,6 +93,7 @@ list< Evento > ExtremeExorcism::_armarListaDeEventos(const list< Accion > &accio
     list< Evento > res;
     for(auto a : acciones){
         Evento evento_nuevo = _hacerEventoConAccionYPosYDir(a, pd);
+        pd = evento_nuevo.pos_y_dir(); // Al quitar las referencias, falto actualizar la pos y la dir al nuevo valor
         res.push_back(evento_nuevo);
     }
     return res;
