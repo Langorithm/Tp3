@@ -86,11 +86,9 @@ list< Evento > ExtremeExorcism::_armarListaDeEventos(const list< Accion > &accio
 
 Fantasma ExtremeExorcism::_crearFantasmaYHacerloVivir(const list< Accion > &acciones, PosYDir pd){
 
-    PosYDir posDir_original = pd;
-
     Fantasma fantasma = _armarListaDeEventos(acciones, pd);
 
-    _fvPub.push_back(posDir_original);
+    _fvPub.push_back(pd);
     infoFantasmaPriv info;
     info.vivo = &_fvPub.back();
     info.f = fantasma;
@@ -160,7 +158,6 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
 
     Fantasma primerFantasma = _crearFantasmaYHacerloVivir(acciones_fantasma, f_init);
-    _fantasmas.fast_insert(primerFantasma);
 
     _limpiarMatrizDisparos(h);
 
