@@ -50,11 +50,6 @@ private:
   // Empiezo por declarar todas las estructuras que estan en la representacion del modulo juego.md del tp2
   // Nótese que algunos structs (como Evento) estan en TiposJuego.h
 
-    struct infoJugadorPub{
-      Jugador identificador;
-      Pos pos;
-      Dir dir;
-  };
     struct infoJugadorPriv{
         list<Evento> acciones;
     };
@@ -63,7 +58,7 @@ private:
         PosYDir* vivo;
     };
 
-  list< infoJugadorPub > _jvPub;
+  list<pair<Jugador, PosYDir>> _jvPub;
   list< infoJugadorPriv > _jvPriv;
 
   string_map<infoJugadorPriv*> _jugadores;

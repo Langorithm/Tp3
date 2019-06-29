@@ -6,10 +6,10 @@
 // Complejidad a Cumplir: O(?)
 // Complejidad Actual: O(#jv)
 void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
-    list< infoJugadorPub >::iterator itPublico = begin(_jvPub);
+    list< pair<Jugador, PosYDir> >::iterator itPublico = begin(_jvPub);
     for(auto jug : _jvPriv){
 
-        if( itPublico->identificador != j) {  // Ojo con la complejidad de esto!
+        if( itPublico->first != j) {  // Ojo con la complejidad de esto!
 
             Evento evento_anterior = jug.acciones.back();
             Evento evento_nuevo = Evento(evento_anterior.pos, evento_anterior.dir, false);
@@ -34,12 +34,8 @@ void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
 
     for(auto j : _jugadores.claves()){
         infoJugadorPriv jPriv;
-        infoJugadorPub jPub;
-
         PosYDir pd = inicial.at(j);
-        jPub.pos = pd.pos;
-        jPub.dir = pd.dir;
-        jPub.identificador = j;
+        pair<Jugador, PosYDir> jPub(j, PosYDir(pd.pos, pd.dir));
 
         Evento evento_inicial = Evento(pd.pos,pd.dir,false); // Agrego el evento esperar asi funciona ejecAccion
         jPriv.acciones.push_back(evento_inicial);
@@ -206,10 +202,10 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     Evento evento_nuevo = _hacerEventoConAccionYPosYDir(a, nuevaPosYDir);
     jPriv->acciones.push_back(evento_nuevo);
 
-        for(auto i : _jvPub) { // Modifico j en jvPub
-            if (i.identificador == j)
-                i.dir = evento_nuevo.dir;
-            i.pos = evento_nuevo.pos;
+        for(auto info : _jvPub) { // Modifico j en jvPub
+            if (info.first == j)
+                info.second.dir = evento_nuevo.dir;
+            info.second.pos = evento_nuevo.pos;
         }
 
      _losDemasJugadoresEsperan(j);
@@ -220,14 +216,7 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
 
 
 list<pair<Jugador, PosYDir>> ExtremeExorcism::posicionJugadores() const {
-    list<pair<Jugador, PosYDir>> res;
-    for( auto j : _jvPub){
-        PosYDir posicionYDireccion = PosYDir(j.pos,j.dir);
-        pair<Jugador, PosYDir> id_PosYDir = make_pair(j.identificador,posicionYDireccion);
-
-        res.push_back(id_PosYDir);
-    }
-    return res;
+    return _jvPub;
 };
 
 
@@ -300,8 +289,8 @@ const Habitacion &ExtremeExorcism::habitacion() const {
 PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
     assert( _jugadores.at(j) != NULL);
     for(auto jug : _jvPub){
-        if(jug.identificador == j){
-            return PosYDir(jug.pos,jug.dir);
+        if(jug.first == j){
+            return jug.second;
         }
     }
 };
