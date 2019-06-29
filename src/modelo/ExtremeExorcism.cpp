@@ -3,6 +3,8 @@
 
 //--------------------------------------------- Start Funciones Privadas
 
+// Complejidad a Cumplir: O(?)
+// Complejidad Actual: O(#jv)
 void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     list< infoJugadorPub >::iterator itPublico = begin(_jvPub);
     for(auto jug : _jvPriv){
@@ -17,6 +19,8 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     }
 }
 
+// Complejidad a Cumplir: O(?)
+// Complejidad Actual: O(#jv + O(localizarJug) + )
 void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
 
     _jvPriv.erase(_jvPriv.begin(), _jvPriv.end());
@@ -31,7 +35,11 @@ void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
     for(auto j : _jugadores.claves()){
         infoJugadorPriv jPriv;
         infoJugadorPub jPub;
-        // TODO uso contexto para meter pos, dir e identificador en jPub
+
+        PosYDir pd = inicial[j];
+        jPub.pos = pd.pos;
+        jPub.dir = pd.dir;
+        jPub.identificador = j;
 
         _jvPriv.push_back(jPriv);
         _jugadores[j] = &_jvPriv.back();
