@@ -105,7 +105,6 @@ Fantasma ExtremeExorcism::_crearFantasmaYHacerloVivir(const list< Accion > &acci
 
     _fvPub.push_back(pd);
     infoFantasmaPriv info;
-    info.vivo = &_fvPub.back();
     info.f = fantasma;
     _fvPriv.push_back(info);
     _fantasmas.insert(fantasma);
@@ -221,24 +220,12 @@ list<pair<Jugador, PosYDir>> ExtremeExorcism::posicionJugadores() const {
 
 
 list<PosYDir> ExtremeExorcism::posicionFantasmas() const {
-    list<PosYDir> posicionesFantasmas;
-    for(auto f : _fvPriv) {
-        if (f.vivo != NULL) {
-            PosYDir posYDirFantasma = PosYDir(f.vivo->pos,f.vivo->dir);
-            posicionesFantasmas.push_back(posYDirFantasma);
-        }
-    } // Esto funciona si eliminamos el nodo de _fvPub y dejamos el puntero de _fvPriv en NULL cada vez que muera
-      // un fantasma.
-    return posicionesFantasmas;
+    return _fvPub;
 };
 
 
 PosYDir ExtremeExorcism::posicionEspecial() const {
-    infoFantasmaPriv fPriv = _fvPriv.front();
-    PosYDir* fPub = fPriv.vivo;
-    Pos posicion = fPub->pos;
-    Dir direccion = fPub->dir;
-    return PosYDir(posicion,direccion);
+    return _fvPub.front();
 };
 
 

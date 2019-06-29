@@ -55,7 +55,6 @@ private:
     };
     struct infoFantasmaPriv{
         Fantasma f;
-        PosYDir* vivo;
     };
 
   list<pair<Jugador, PosYDir>> _jvPub;
