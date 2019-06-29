@@ -34,7 +34,7 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
     }
 }
 
-void ExtremeExorcism::_aplicarMover(Accion a, PosYDir &pd){
+PosYDir ExtremeExorcism::_aplicarMover(Accion a, PosYDir pd){
     if(a == MABAJO){
         if((_hab.proxima_posValida(pd.pos, ABAJO))){
            pd.pos.second++;
@@ -56,13 +56,14 @@ void ExtremeExorcism::_aplicarMover(Accion a, PosYDir &pd){
             pd.dir = IZQUIERDA;
         }
     }
+    return pd;
 }
 
-Evento ExtremeExorcism::_hagoEventoConAccionYPosYDir(Accion a, PosYDir &pd){
+Evento ExtremeExorcism::_hagoEventoConAccionYPosYDir(Accion a, PosYDir pd){
     if(a != DISPARAR && a != ESPERAR){
 
-        _aplicarMover(a, pd);
-        return Evento(pd.pos,pd.dir,false);
+        PosYDir nuevaPd = _aplicarMover(a, pd);
+        return Evento(nuevaPd.pos, nuevaPd.dir, false);
 
     } else if(a == DISPARAR){
 
@@ -77,7 +78,7 @@ Evento ExtremeExorcism::_hagoEventoConAccionYPosYDir(Accion a, PosYDir &pd){
 list< Evento > ExtremeExorcism::_armoListaDeEventos(const list< Accion > &acciones, PosYDir pd){
     list< Evento > res;
     for(auto a : acciones){
-        Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd); // pd es pasado por referencia y actualizado
+        Evento evento_nuevo = _hagoEventoConAccionYPosYDir(a, pd);
         res.push_back(evento_nuevo);
     }
     return res;
