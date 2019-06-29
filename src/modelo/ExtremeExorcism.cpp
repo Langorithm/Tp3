@@ -7,7 +7,7 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     list< infoJugadorPub >::iterator itPublico = begin(_jvPub);
     for(auto jug : _jvPriv){
 
-        if( itPublico->identificador != j) {
+        if( itPublico->identificador != j) {  // Ojo con la complejidad de esto!
 
             Evento evento_anterior = jug.acciones.back();
             Evento evento_nuevo = Evento(evento_anterior.pos, evento_anterior.dir, false);
@@ -25,7 +25,7 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
     for(auto j : _jugadores.claves()){
         infoJugadorPriv jPriv;
         infoJugadorPub jPub;
-        // uso contexto para meter pos, dir e identificador en jPub
+        // TODO uso contexto para meter pos, dir e identificador en jPub
 
         _jvPriv.push_back(jPriv);
         _jugadores[j] = &_jvPriv.back();
@@ -119,6 +119,7 @@ Evento _iesimo(const list<Evento> &eventos, int indice) {
 }
 
 // Sospecho error by one
+// Cuidado con la complejidad de esto!
 Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantPasos) const{
     int tamano = eventos.size();
     int indice = cantPasos % (tamano * 2);
