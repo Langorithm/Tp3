@@ -23,8 +23,8 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
 // Complejidad Actual: O(#jv + O(localizarJug) + )
 void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
 
-    _jvPriv.erase(_jvPriv.begin(), _jvPriv.end());
-    _jvPub.erase(_jvPub.begin(), _jvPub.end());
+    _jvPriv.clear();
+    _jvPub.clear();
 
     map<Jugador, PosYDir> inicial = ctx->localizar_jugadores(
         _jugadores.claves(),
