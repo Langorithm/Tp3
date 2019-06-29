@@ -41,6 +41,10 @@ void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
         jPub.dir = pd.dir;
         jPub.identificador = j;
 
+        Evento evento_inicial = Evento(pd.pos,pd.dir,false); // Agrego el evento esperar asi funciona ejecAccion
+        jPriv.acciones.push_back(evento_inicial);
+
+
         _jvPriv.push_back(jPriv);
         _jugadores[j] = &_jvPriv.back();
 
@@ -189,8 +193,6 @@ void ExtremeExorcism::pasar(){
 
 
 void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
-    // Actualizo los datos del jugador, hay que ver si vive o muere, pues no lo tuve en cuenta.
-    // todo lo que sigue podriamos hacerlo en una funcion aparte
 
     infoJugadorPriv* jPriv = _jugadores[j];
 
