@@ -109,7 +109,7 @@ void ExtremeExorcism::_limpiarMatrizDisparos(const Habitacion &h){
     }
 }
 
-Evento ExtremeExorcism::_iesimo(const list<Evento> &eventos, int indice) const{
+Evento _iesimo(const list<Evento> &eventos, int indice) {
     int i = 0;
     for(auto e : eventos){
         if(i == indice){
@@ -117,6 +117,7 @@ Evento ExtremeExorcism::_iesimo(const list<Evento> &eventos, int indice) const{
         }
         i++;
     }
+    assert(false);  // Sí o sí tiene que retornar algo en la línea de arriba
 }
 
 // Sospecho error by one
