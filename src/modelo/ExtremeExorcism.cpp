@@ -17,10 +17,16 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     }
 }
 
-void ExtremeExorcism::_revivirTodosLosJugadores(){
+void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
 
     _jvPriv.erase(_jvPriv.begin(), _jvPriv.end());
     _jvPub.erase(_jvPub.begin(), _jvPub.end());
+
+    map<Jugador, PosYDir> inicial = ctx->localizar_jugadores(
+        _jugadores.claves(),
+        fantasmas(),
+        _hab
+    );
 
     for(auto j : _jugadores.claves()){
         infoJugadorPriv jPriv;
@@ -156,7 +162,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     for (auto j : jugadores){
         _jugadores[j] = NULL;
     }
-    _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
+    _revivirTodosLosJugadores(ctx); // Aca me encargo de meterlos en jvPriv, jvPub
 
     Fantasma primerFantasma = _crearFantasmaYHacerloVivir(acciones_fantasma, f_init);
 

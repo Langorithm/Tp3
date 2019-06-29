@@ -82,7 +82,7 @@ private:
   // Funciones Privadas
 
   void _losDemasJugadoresEsperan(Jugador j);
-  void _revivirTodosLosJugadores();
+  void _revivirTodosLosJugadores(Contexto*);
   list< Evento > _armarListaDeEventos(const list< Accion > &, PosYDir);
   Evento _hacerEventoConAccionYPosYDir(Accion a, PosYDir pd);
   PosYDir _aplicarMover(Accion a, PosYDir pd);
