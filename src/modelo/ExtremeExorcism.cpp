@@ -30,12 +30,13 @@ void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
         _hab
     );
 
-    for(auto j : _jugadores.claves()){
+    for(Jugador j : _jugadores.claves()){
         infoJugadorPriv jPriv;
         PosYDir pd = inicial.at(j);
         pair<Jugador, PosYDir> jPub(j, PosYDir(pd.pos, pd.dir));
 
-        Evento evento_inicial = Evento(pd.pos,pd.dir,false); // Agrego el evento esperar asi funciona ejecAccion
+        // Agrego el evento esperar asi funciona ejecAccion
+        Evento evento_inicial = Evento(pd.pos, pd.dir, false);
         jPriv.acciones.push_back(evento_inicial);
 
 
@@ -72,18 +73,13 @@ PosYDir ExtremeExorcism::_aplicarMover(Accion a, PosYDir pd){
 }
 
 Evento ExtremeExorcism::_hacerEventoConAccionYPosYDir(Accion a, PosYDir pd){
-    if(a != DISPARAR && a != ESPERAR){
-
+    if(a == DISPARAR){
+        return Evento(pd.pos,pd.dir,true);
+    } else if(a == ESPERAR){
+        return Evento(pd.pos,pd.dir,false);
+    }else{
         PosYDir nuevaPd = _aplicarMover(a, pd);
         return Evento(nuevaPd.pos, nuevaPd.dir, false);
-
-    } else if(a == DISPARAR){
-
-        return  Evento(pd.pos,pd.dir,true);
-
-    } else if(a == ESPERAR){
-
-        return  Evento(pd.pos,pd.dir,false);
     }
 }
 
@@ -190,21 +186,23 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     assert(jPriv != NULL);  // El jugador tiene que estar vivo!
 
     PosYDir nuevaPosYDir = jPriv->acciones.back().pos_y_dir();
-    // Esto de buscar pd en jPriv solo lo podemos hacer cuando ya avanzó por lo menos una vez.
-    // Se puede resolver colocando un evento esperar cuando revivimos los jugadores,
-    // y despues no darle bola para otra cosa que no sea esta función.
-    // O la otra es buscar la pos y la dir en _jvPub siempre, total al revivirlos vamos a inicializarlas en jvPub.
+    // Esto de buscar pd en jPriv solo lo podemos hacer cuando ya avanzó por lo
+    // menos una vez.  Se puede resolver colocando un evento esperar cuando
+    // revivimos los jugadores, y despues no darle bola para otra cosa que no
+    // sea esta función.  O la otra es buscar la pos y la dir en _jvPub
+    // siempre, total al revivirlos vamos a inicializarlas en jvPub.
     Evento evento_nuevo = _hacerEventoConAccionYPosYDir(a, nuevaPosYDir);
     jPriv->acciones.push_back(evento_nuevo);
 
-        for(auto info : _jvPub) { // Modifico j en jvPub
-            if (info.first == j)
-                info.second.dir = evento_nuevo.dir;
-            info.second.pos = evento_nuevo.pos;
-        }
+    for(auto info : _jvPub) { // Modifico j en jvPub
+        if (info.first == j)
+            info.second.dir = evento_nuevo.dir;
+        info.second.pos = evento_nuevo.pos;
+    }
 
      _losDemasJugadoresEsperan(j);
-    // Lo mismo que discutimos arriba de como obtener pos y dir se aplica para esta losDemasJugadoresEsperan
+    // Lo mismo que discutimos arriba de como obtener pos y dir se aplica para
+    // esta losDemasJugadoresEsperan
 
      pasar(); // La funcion en donde se mueven todos los fantasmas
 };
