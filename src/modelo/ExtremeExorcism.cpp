@@ -142,6 +142,9 @@ Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantP
 }
 
 Pos ExtremeExorcism::_avanzar(Pos pos, Dir dir) const{
+    // TODO Esto no usa el ExtremeExorcism. Tendría más sentido moverlo a
+    // Habitacion.
+    // Además lo hicimos de esta forma en el TP2 (la llamamos avanzarCasillero)
     if(dir == ABAJO){
         pos.second--;
 
@@ -214,8 +217,42 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
 
 
 bool ExtremeExorcism::_matarFantasmas(PosYDir pd){
-    // TODO Completar
-    return false;
+    bool res = false;
+    Pos pos = pd.pos;
+    while(_hab.proxima_posValida(pos, pd.dir)){
+        pos = _avanzar(pos, pd.dir);
+        _matrizDisparos[pos.first][pos.second] = true;
+    }
+
+    list<PosYDir>::iterator pubIt = _fvPub.begin();
+    list<Fantasma>::iterator privIt = _fvPriv.begin();
+    while(pubIt != _fvPub.end() && privIt != _fvPriv.end()){
+        if(_matrizDisparos[pubIt->pos.first][pubIt->pos.second]){
+            // Le dieron a un fantasma
+            // TODO Revisar la complejidad de comparar fantasmas, en el TP2 la
+            // pusimos O(1) pero no se si es correcto. Por ahí tiene que ver
+            // con que algo está por referencia
+            // TODO Chequear que sea efectivamente front() y no back()
+            if(*privIt == _fvPriv.front())
+                res = true;
+            pubIt = _fvPub.erase(pubIt);
+            privIt = _fvPriv.erase(privIt);
+        }
+        ++pubIt;
+        ++privIt;
+    }
+
+    // La iteración sobre ambas listas tiene que haber terminado al mismo
+    // tiempo, ya que tienen la misma longitud
+    assert(pubIt == _fvPub.end() && privIt == _fvPriv.end());
+
+    // Limpiar _matrizDisparos
+    pos = pd.pos;
+    while(_hab.proxima_posValida(pos, pd.dir)){
+        pos = _avanzar(pos, pd.dir);
+        _matrizDisparos[pos.first][pos.second] = false;
+    }
+    return res;
 }
 
 
