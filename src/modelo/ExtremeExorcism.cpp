@@ -19,8 +19,6 @@ void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     }
 }
 
-// Complejidad a Cumplir: O(?)
-// Complejidad Actual: O(#jv + O(localizarJug) + )
 void ExtremeExorcism::_revivirTodosLosJugadores(Contexto *ctx){
 
     _jvPriv.clear();
