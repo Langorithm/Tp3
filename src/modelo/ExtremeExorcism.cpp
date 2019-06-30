@@ -308,12 +308,19 @@ void ExtremeExorcism::_nuevaRonda(Fantasma f){
 
 
 void ExtremeExorcism::_regenerarFantasmas(){
-    // TODO Completar
+    _fvPriv.clear();
+    _fvPub.clear();
+    for(Fantasma f : _fantasmas){
+        _fvPriv.push_front(f);
+        _fvPub.push_front(f.front().pos_y_dir());
+    }
 }
 
 
 void ExtremeExorcism::_nuevoFantasmaEspecial(Fantasma f){
-    // TODO Completar
+    _fantasmas.insert(f);
+    _fvPriv.push_front(f);
+    _fvPub.push_front(f.front().pos_y_dir());
 }
 
 
@@ -392,6 +399,7 @@ PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
 
 
 const set<Jugador> ExtremeExorcism::jugadores() const {
+    // TODO Creo que la función tenía que ser O(1). Chequear
     set<Jugador> jugs;
     for(auto j : _jugadores.claves()){
         jugs.insert(j);
@@ -401,6 +409,7 @@ const set<Jugador> ExtremeExorcism::jugadores() const {
 
 
 const list<Fantasma> ExtremeExorcism::fantasmas() const {
+    // TODO Creo que la función tenía que ser O(1). Chequear
     list<Fantasma> res;
     for(auto f : _fantasmas){
         res.push_back(f);
