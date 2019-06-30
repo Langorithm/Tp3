@@ -190,17 +190,16 @@ void ExtremeExorcism::pasar(){
     }
     assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
 
-
-    pubIt = _jvPub.begin();
-    privIt = _jvPriv.begin();
-    while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
-        Evento evento = _recorrer(privIt->acciones, _cantidadPasos);
-        pubIt->second.pos = evento.pos;
-        pubIt->second.dir = evento.dir;
-        ++pubIt;
-        ++privIt;
+    list<PosYDir>::iterator jPubIt = _fvPub.begin();
+    list<Fantasma>::iterator jPrivIt = _fvPriv.begin();
+    while(jPubIt != _fvPub.end() && jPrivIt != _fvPriv.end()){
+        Evento evento = _recorrer(*jPrivIt, _cantidadPasos);
+        jPubIt->pos = evento.pos;
+        jPubIt->dir = evento.dir;
+        ++jPubIt;
+        ++jPrivIt;
     }
-    assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
+    assert(jPubIt == _fvPub.end() && jPrivIt == _fvPriv.end());
 
     // Limpiar _matrizDisparos
     for(PosYDir pd : disparos){
