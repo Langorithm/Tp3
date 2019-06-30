@@ -132,7 +132,7 @@ Evento _iesimo(const list<Evento> &eventos, int indice) {
 
 // Sospecho error by one
 // Cuidado con la complejidad de esto!
-Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantPasos) const{
+Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) const{
     int tamano = eventos.size();
     int indice = cantPasos % (tamano * 2);
     if(indice < tamano){
@@ -212,6 +212,9 @@ void ExtremeExorcism::pasar(){
     pubIt = _jvPub.begin();
     privIt = _jvPriv.begin();
     while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
+        Evento evento = _recorrer(privIt->acciones, _cantidadPasos);
+        pubIt->second.pos = evento.pos;
+        pubIt->second.dir = evento.dir;
         ++pubIt;
         ++privIt;
     }
@@ -339,7 +342,7 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
     auto fanPub = _fvPub.begin();
     for(auto fanPriv : _fvPriv){
 
-        Evento evento_fantasma = _dameEvento(fanPriv, _cantidadPasos);
+        Evento evento_fantasma = _recorrer(fanPriv, _cantidadPasos);
         PosYDir pd = evento_fantasma.pos_y_dir();
 
         if(evento_fantasma.dispara){
