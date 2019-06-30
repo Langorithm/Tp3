@@ -196,6 +196,34 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
     return eventosAux[cantPasos % eventosAux.size()];
 }
 
+list<Pos> ExtremeExorcism::_listaDisparosFantasmas() const {
+    // Esto es como _listaPosicionesDisparos del tp2, pero retorna una lista de
+    // PosYDir en vez de lista de Pos
+    // TODO puede tener repetidos, me imagino que no importa, pero chequear
+
+    list<Pos> res;
+
+    auto fanPub = _fvPub.begin();
+    for(auto fanPriv : _fvPriv){
+
+        Evento evento_fantasma = _recorrer(fanPriv, _cantidadPasos);
+        PosYDir pd = evento_fantasma.pos_y_dir();
+
+        if(evento_fantasma.dispara){
+
+            while(_hab.hayVecinoLibre(pd.pos,pd.dir)){
+                pd.pos = _hab.avanzarCasillero(pd.pos, pd.dir);
+                res.push_back(pd.pos);
+            }
+
+        }
+
+        fanPub++;
+    }
+
+    return res;
+}
+
 //--------------------------------------- End Funciones Privadas
 
 // -------------------------------------- Start Funciones Publicas
@@ -218,10 +246,10 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 
 
 void ExtremeExorcism::pasar(){
-    list<PosYDir> disparos = disparosFantasmas();
+    list<Pos> disparos = _listaDisparosFantasmas();
 
-    for(PosYDir pd : disparos){
-        _matrizDisparos[pd.pos.first][pd.pos.second] = true;
+    for(Pos pos : disparos){
+        _matrizDisparos[pos.first][pos.second] = true;
     }
 
     list<pair<Jugador, PosYDir>>::iterator pubIt = _jvPub.begin();
@@ -253,8 +281,8 @@ void ExtremeExorcism::pasar(){
     assert(jPubIt == _fvPub.end() && jPrivIt == _fvPriv.end());
 
     // Limpiar _matrizDisparos
-    for(PosYDir pd : disparos){
-        _matrizDisparos[pd.pos.first][pd.pos.second] = false;
+    for(Pos pos : disparos){
+        _matrizDisparos[pos.first][pos.second] = false;
     }
 
     _cantidadPasos++;
@@ -374,9 +402,6 @@ PosYDir ExtremeExorcism::posicionEspecial() const {
 
 
 list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
-    // Esto es como _listaPosicionesDisparos del tp2, pero retorna una lista de
-    // PosYDir en vez de lista de Pos
-    // TODO puede tener repetidos, me imagino que no importa, pero chequear
 
     list<PosYDir> res;
 
@@ -388,10 +413,7 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
 
         if(evento_fantasma.dispara){
 
-            while(_hab.hayVecinoLibre(pd.pos,pd.dir)){
-                pd.pos = _hab.avanzarCasillero(pd.pos, pd.dir);
-                res.push_back(pd);
-            }
+            res.push_back(pd);
 
         }
 
@@ -406,8 +428,8 @@ set<Pos> ExtremeExorcism::posicionesDisparadas() const {
     // TODO No dice de fantasmas, pero asumo que es solo de fantasmas. Tiene
     // sentido? Quedaría igual que posicionesDisparos del tp3
     set<Pos> res;
-    for(PosYDir pd : disparosFantasmas())
-        res.insert(pd.pos);
+    for(Pos pos : _listaDisparosFantasmas())
+        res.insert(pos);
     return res;
 }
 

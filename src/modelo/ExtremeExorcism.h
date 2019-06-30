@@ -87,6 +87,7 @@ private:
   void _nuevaRonda(Fantasma);
   void _regenerarFantasmas();
   void _nuevoFantasmaEspecial(Fantasma);
+  list<Pos> _listaDisparosFantasmas() const;
 
 };
 
