@@ -206,9 +206,9 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     for (auto j : jugadores){
         _jugadores[j] = NULL;
     }
-    _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
 
     Fantasma primerFantasma = _crearFantasmaYHacerloVivir(acciones_fantasma, f_init);
+    _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
 
     _inicializarMatrizDisparos(h);
 
@@ -280,9 +280,11 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
         }
     }
 
-    if(a == DISPARAR && _matarFantasmas(evento_nuevo.pos_y_dir()))
+    if(a == DISPARAR && _matarFantasmas(evento_nuevo.pos_y_dir())){
         // De todos los fantasmas que se mataron, uno de esos es el principal
         _nuevaRonda(jPriv->acciones);
+        return;
+    }
 
 
     _losDemasJugadoresEsperan(j);
@@ -333,9 +335,9 @@ bool ExtremeExorcism::_matarFantasmas(PosYDir pd){
 
 void ExtremeExorcism::_nuevaRonda(Fantasma f){
     _cantidadPasos = 0;
-    _revivirTodosLosJugadores();
     _regenerarFantasmas();
     _nuevoFantasmaEspecial(f);
+    _revivirTodosLosJugadores();
 }
 
 
