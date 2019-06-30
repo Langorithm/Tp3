@@ -53,23 +53,23 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
 
 PosYDir ExtremeExorcism::_aplicarMover(Accion a, PosYDir pd){
     if(a == MABAJO){
-        if((_hab.proxima_posValida(pd.pos, ABAJO))){
-           pd.pos.second++;
-           pd.dir = ABAJO;
+        if((_hab.hayVecinoLibre(pd.pos, ABAJO))){
+            pd.pos = _hab.avanzarCasillero(pd.pos, ABAJO);
+            pd.dir = ABAJO;
         }
     } else if(a == MARRIBA){
-        if((_hab.proxima_posValida(pd.pos, ARRIBA))){
-            pd.pos.second--;
+        if((_hab.hayVecinoLibre(pd.pos, ARRIBA))){
+            pd.pos = _hab.avanzarCasillero(pd.pos, ARRIBA);
             pd.dir = ARRIBA;
         }
     } else if(a == MDERECHA){
-        if((_hab.proxima_posValida(pd.pos, DERECHA))){
-            pd.pos.first++;
+        if((_hab.hayVecinoLibre(pd.pos, DERECHA))){
+            pd.pos = _hab.avanzarCasillero(pd.pos, DERECHA);
             pd.dir = DERECHA;
         }
     } else if(a == MIZQUIERDA){
-        if((_hab.proxima_posValida(pd.pos, IZQUIERDA))){
-            pd.pos.first--;
+        if((_hab.hayVecinoLibre(pd.pos, IZQUIERDA))){
+            pd.pos = _hab.avanzarCasillero(pd.pos, IZQUIERDA);
             pd.dir = IZQUIERDA;
         }
     }
@@ -146,24 +146,6 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
     }
 }
 
-Pos ExtremeExorcism::_avanzar(Pos pos, Dir dir) const{
-    // TODO Esto no usa el ExtremeExorcism. Tendría más sentido moverlo a
-    // Habitacion.
-    // Además lo hicimos de esta forma en el TP2 (la llamamos avanzarCasillero)
-    if(dir == ABAJO){
-        pos.second--;
-
-    } else if(dir == ARRIBA) {
-        pos.second++;
-
-    } else if(dir == DERECHA){
-        pos.first++;
-
-    } else if(dir == IZQUIERDA){
-        pos.first--;
-    }
-    return pos;
-}
 //--------------------------------------- End Funciones Privadas
 
 // -------------------------------------- Start Funciones Publicas
@@ -262,8 +244,8 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
 bool ExtremeExorcism::_matarFantasmas(PosYDir pd){
     bool res = false;
     Pos pos = pd.pos;
-    while(_hab.proxima_posValida(pos, pd.dir)){
-        pos = _avanzar(pos, pd.dir);
+    while(_hab.hayVecinoLibre(pos, pd.dir)){
+        pos = _hab.avanzarCasillero(pos, pd.dir);
         _matrizDisparos[pos.first][pos.second] = true;
     }
 
@@ -291,8 +273,8 @@ bool ExtremeExorcism::_matarFantasmas(PosYDir pd){
 
     // Limpiar _matrizDisparos
     pos = pd.pos;
-    while(_hab.proxima_posValida(pos, pd.dir)){
-        pos = _avanzar(pos, pd.dir);
+    while(_hab.hayVecinoLibre(pos, pd.dir)){
+        pos = _hab.avanzarCasillero(pos, pd.dir);
         _matrizDisparos[pos.first][pos.second] = false;
     }
     return res;
@@ -354,8 +336,8 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
 
         if(evento_fantasma.dispara){
 
-            while(_hab.proxima_posValida(pd.pos,pd.dir)){
-                pd.pos = _avanzar(pd.pos, pd.dir);
+            while(_hab.hayVecinoLibre(pd.pos,pd.dir)){
+                pd.pos = _hab.avanzarCasillero(pd.pos, pd.dir);
                 res.push_back(pd);
             }
 

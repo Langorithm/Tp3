@@ -81,28 +81,41 @@ unsigned int Habitacion::tam() const {
     return matriz.size();
 }
 
-bool Habitacion::posValida(Pos pos) const {
+bool Habitacion::_posValida(Pos pos) const {
     return pos.first >= 0 &&
         pos.first < tam() &&
         pos.second >= 0 &&
         pos.second < tam();
 };
 
-bool Habitacion::proxima_posValida(Pos pos, Dir dir) const{
+bool Habitacion::hayVecinoLibre(Pos pos, Dir dir) const{
     if(dir == ABAJO){
-        pos.second--;
+        return pos.second >=1 && !matriz[pos.first][pos.second-1];
     } else if(dir == ARRIBA){
-        pos.second++;
-    } else if(dir == DERECHA){
-        pos.first++;
+        return pos.second < matriz.size() - 1 && !matriz[pos.first][pos.second+1];
     } else if(dir == IZQUIERDA){
-        pos.second--;
+        return pos.first >= 1 && !matriz[pos.first-1][pos.second];
+    } else if(dir == DERECHA){
+        return pos.first < matriz.size() - 1 && !matriz[pos.first+1][pos.second];
     }
-    return posValida(pos) && !ocupado(pos);
+    assert(false);
+}
+
+Pos Habitacion::avanzarCasillero(Pos pos, Dir dir) const{
+    if(dir == ABAJO){
+        return make_pair(pos.first, pos.second-1);
+    } else if(dir == ARRIBA){
+        return make_pair(pos.first, pos.second+1);
+    } else if(dir == IZQUIERDA){
+        return make_pair(pos.first-1, pos.second);
+    } else if(dir == DERECHA){
+        return make_pair(pos.first+1, pos.second);
+    }
+    assert(false);
 }
 
 bool Habitacion::ocupado(Pos pos) const {
-    assert(posValida(pos));
+    assert(_posValida(pos));
     return matriz[pos.first][pos.second];
 };
 

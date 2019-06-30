@@ -15,15 +15,15 @@ public:
 
     unsigned int tam() const;
 
-    bool posValida(Pos) const;
-
-    bool proxima_posValida(Pos, Dir) const;
+    bool hayVecinoLibre(Pos, Dir) const;
+    Pos avanzarCasillero(Pos, Dir) const;
     bool ocupado(Pos) const;
 
     bool operator==(const Habitacion&) const;
 
 private:
     vector<vector<bool>> matriz;
+    bool _posValida(Pos) const;
 };
 
 
