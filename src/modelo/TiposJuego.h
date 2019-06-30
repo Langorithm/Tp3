@@ -21,6 +21,8 @@ enum Dir {
     ARRIBA = 0, ABAJO, IZQUIERDA, DERECHA
 };
 
+Dir dir_inversa(Dir);
+
 enum Accion {
     MARRIBA, MABAJO, MIZQUIERDA, MDERECHA, DISPARAR, ESPERAR
 };

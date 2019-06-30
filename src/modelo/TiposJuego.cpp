@@ -34,3 +34,19 @@ bool Evento::operator==(const Evento &o) const {
   return pos == o.pos and dir == o.dir and dispara == o.dispara;
 }
 
+Dir dir_inversa(Dir dir){
+    switch(dir){
+        case ARRIBA:
+            return ABAJO;
+            break;
+        case ABAJO:
+            return ARRIBA;
+            break;
+        case IZQUIERDA:
+            return DERECHA;
+            break;
+        case DERECHA:
+            return IZQUIERDA;
+            break;
+    }
+};
