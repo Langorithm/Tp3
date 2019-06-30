@@ -234,9 +234,10 @@ void ExtremeExorcism::pasar(){
             _jugadores[pubIt->first] = NULL;
             pubIt = _jvPub.erase(pubIt);
             privIt = _jvPriv.erase(privIt);
+        }else{
+            ++pubIt;
+            ++privIt;
         }
-        ++pubIt;
-        ++privIt;
     }
     assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
 
