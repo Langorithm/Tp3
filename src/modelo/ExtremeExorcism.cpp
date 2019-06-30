@@ -133,17 +133,30 @@ Evento _iesimo(const list<Evento> &eventos, int indice) {
 // Sospecho error by one
 // Cuidado con la complejidad de esto!
 Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) const{
-    int tamano = eventos.size();
-    int indice = cantPasos % (tamano * 2);
-    if(indice < tamano){
+    /*
+    int length = eventos.size();
+    int indice = _cantidadPasos % ((length+5)*2);
+
+    if(indice <= length){ // Devuelvo normal
+
         return _iesimo(eventos, indice);
-    } else {
-        indice = tamano - (indice % tamano);
-        if(indice >= tamano)
-            // TODO ver por qué pasa esto. Agregué este if solo para que no me explote el assert!
-            return _iesimo(eventos, indice-1);
-        return _iesimo(eventos, indice);
+
+    } else if(length < indice <= (length+5) ){ // Devuelvo esperar posiicion final
+
+        Evento res = eventos.back();
+        return Evento(res.pos,res.dir,false);
+
+    } else if( (length+5) < indice <= (2*length + 5) ){ // Devuelvo invertido
+
+        int indiceInvertido = (length - ((indice - 5) % length) ) + 1;
+        return _iesimo(eventos, indiceInvertido);
+
+    } else if ( (2*length + 5) < indice <= (2*(length + 5)) ){ // Devuelvo esperar posicion inicial
+
+        Evento res = eventos.front();
+        return Evento(res.pos,res.dir,false);
     }
+    assert(false);*/
 }
 
 //--------------------------------------- End Funciones Privadas
