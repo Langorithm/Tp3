@@ -617,24 +617,26 @@ TEST(EE, FantasmaNuevo) {
   ee.ejecutarAccion("0", DISPARAR);
 
   VALIDAR_ESTADO(1, "w.W\n"
-                 ".#.\n"
-                 ".s.\n", ee);
+                    ".#.\n"
+                    ".s.\n", ee);
+  EXPECT_EQ(ee.disparosFantasmas().size(), 0);
 
   ee.pasar();
   VALIDAR_ESTADO(1, "w.W\n"
-                 ".#.\n"
-                 "a..\n", ee);
+                    ".#.\n"
+                    "a..\n", ee);
+  EXPECT_EQ(ee.disparosFantasmas().size(), 0);
 
   ee.pasar();
   VALIDAR_ESTADO(1, "w.W\n"
-                 "s#.\n"
-                 "...\n", ee);
+                    "s#.\n"
+                    "...\n", ee);
   EXPECT_EQ(ee.disparosFantasmas().size(), 0);
   
   ee.pasar();
   VALIDAR_ESTADO(1, "w.W\n"
-                 "s#.\n"
-                 "...\n", ee);
+                    "s#.\n"
+                    "...\n", ee);
   EXPECT_EQ(ee.disparosFantasmas().size(), 1);
   
   for (int i = 0; i < 5; i++) {

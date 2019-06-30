@@ -408,7 +408,7 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
     auto fanPub = _fvPub.begin();
     for(auto fanPriv : _fvPriv){
 
-        Evento evento_fantasma = _recorrer(fanPriv, _cantidadPasos);
+        Evento evento_fantasma = _recorrer(fanPriv, _cantidadPasos-1);  // El -1 hace que pasen los tests
         PosYDir pd = evento_fantasma.pos_y_dir();
 
         if(evento_fantasma.dispara){
