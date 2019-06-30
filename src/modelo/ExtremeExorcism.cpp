@@ -29,9 +29,9 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
     _jvPub.clear();
 
     map<Jugador, PosYDir> inicial = _ctx->localizar_jugadores(
-        _jugadores.claves(),
-        fantasmas(),
-        _hab
+            _jugadores.claves(),
+            fantasmas(),
+            _hab
     );
 
     for(Jugador j : _jugadores.claves()){
@@ -157,6 +157,44 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
         return Evento(res.pos,res.dir,false);
     }
     assert(false);*/
+
+    vector<Evento> eventosVec;
+    vector<Evento> eventosVecInv;
+    for (Evento ev : eventos){
+        eventosVec.push_back(ev);
+    }
+
+    for (int i = eventosVec.size()-1; i >= 0; --i) {
+        eventosVecInv.push_back(eventosVec[i]);
+    }
+
+    for (Evento ev : eventosVecInv){
+        ev.dir = dir_inversa(ev.dir);
+    }
+
+    vector<Evento> eventosAux;
+
+    for (Evento ev : eventosVec) eventosAux.push_back(ev);
+    Evento evAux = eventosVec[eventosVec.size()-1];
+    evAux.dispara = false;
+
+    eventosAux.push_back(evAux);
+    eventosAux.push_back(evAux);
+    eventosAux.push_back(evAux);
+    eventosAux.push_back(evAux);
+    eventosAux.push_back(evAux);
+
+    for (Evento ev : eventosVecInv) eventosAux.push_back(ev);
+    evAux = eventosVecInv[eventosVecInv.size()-1];
+    evAux.dispara = false;
+
+    eventosAux.push_back(evAux);
+    eventosAux.push_back(evAux);
+    eventosAux.push_back(evAux);
+    eventosAux.push_back(evAux);
+    eventosAux.push_back(evAux);
+
+    return eventosAux[cantPasos % eventosAux.size()];
 }
 
 //--------------------------------------- End Funciones Privadas
@@ -164,7 +202,7 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
 // -------------------------------------- Start Funciones Publicas
 
 ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
-                list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h), _cantidadPasos(0), _ctx(ctx){
+                                 list<Accion> acciones_fantasma, Contexto *ctx) : _hab(h), _cantidadPasos(0), _ctx(ctx){
 
     for (auto j : jugadores){
         _jugadores[j] = NULL;
@@ -247,9 +285,9 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
         _nuevaRonda(jPriv->acciones);
 
 
-     _losDemasJugadoresEsperan(j);
+    _losDemasJugadoresEsperan(j);
 
-     pasar(); // La funcion en donde se mueven todos los fantasmas
+    pasar(); // La funcion en donde se mueven todos los fantasmas
 };
 
 
