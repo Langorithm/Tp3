@@ -11,7 +11,7 @@
 // estaba mal
 void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
     list< pair<Jugador, PosYDir> >::iterator itPublico = begin(_jvPub);
-    for(auto jug : _jvPriv){
+    for(infoJugadorPriv &jug : _jvPriv){
 
         if( itPublico->first != j) {  // TODO Ojo con la complejidad de esto!
 
