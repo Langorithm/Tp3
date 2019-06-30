@@ -53,24 +53,24 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
 
 PosYDir ExtremeExorcism::_aplicarMover(Accion a, PosYDir pd){
     if(a == MABAJO){
+        pd.dir = ABAJO;
         if((_hab.hayVecinoLibre(pd.pos, ABAJO))){
             pd.pos = _hab.avanzarCasillero(pd.pos, ABAJO);
-            pd.dir = ABAJO;
         }
     } else if(a == MARRIBA){
+        pd.dir = ARRIBA;
         if((_hab.hayVecinoLibre(pd.pos, ARRIBA))){
             pd.pos = _hab.avanzarCasillero(pd.pos, ARRIBA);
-            pd.dir = ARRIBA;
         }
     } else if(a == MDERECHA){
+        pd.dir = DERECHA;
         if((_hab.hayVecinoLibre(pd.pos, DERECHA))){
             pd.pos = _hab.avanzarCasillero(pd.pos, DERECHA);
-            pd.dir = DERECHA;
         }
     } else if(a == MIZQUIERDA){
+        pd.dir = IZQUIERDA;
         if((_hab.hayVecinoLibre(pd.pos, IZQUIERDA))){
             pd.pos = _hab.avanzarCasillero(pd.pos, IZQUIERDA);
-            pd.dir = IZQUIERDA;
         }
     }
     return pd;
