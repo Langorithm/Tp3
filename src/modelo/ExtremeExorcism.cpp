@@ -165,11 +165,9 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
     }
 
     for (int i = eventosVec.size()-1; i >= 0; --i) {
-        eventosVecInv.push_back(eventosVec[i]);
-    }
-
-    for (Evento ev : eventosVecInv){
+        Evento ev = eventosVec[i];
         ev.dir = dir_inversa(ev.dir);
+        eventosVecInv.push_back(ev);
     }
 
     vector<Evento> eventosAux;
