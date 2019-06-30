@@ -6,6 +6,7 @@
 #include "Contexto.h"
 #include "Habitacion.h"
 #include "TiposJuego.h"
+#include "modulos_basicos/string_map.h"
 #include <list>
 #include <map>
 #include <set>
