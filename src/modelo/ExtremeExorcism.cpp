@@ -89,6 +89,8 @@ Evento ExtremeExorcism::_crearEvento(Accion a, PosYDir pd){
 
 list< Evento > ExtremeExorcism::_armarListaDeEventos(const list< Accion > &acciones, PosYDir pd){
     list< Evento > res;
+    Evento evento_inicial = Evento(pd.pos, pd.dir, false);
+    res.push_back(evento_inicial);
     for(auto a : acciones){
         Evento evento_nuevo = _crearEvento(a, pd);
         pd = evento_nuevo.pos_y_dir(); // Al quitar las referencias, falto actualizar la pos y la dir al nuevo valor
@@ -137,6 +139,9 @@ Evento ExtremeExorcism::_dameEvento(const list<Evento> &eventos, const int cantP
         return _iesimo(eventos, indice);
     } else {
         indice = tamano - (indice % tamano);
+        if(indice >= tamano)
+            // TODO ver por qué pasa esto. Agregué este if solo para que no me explote el assert!
+            return _iesimo(eventos, indice-1);
         return _iesimo(eventos, indice);
     }
 }
@@ -181,6 +186,41 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 
 
 void ExtremeExorcism::pasar(){
+    list<PosYDir> disparos = disparosFantasmas();
+
+    for(PosYDir pd : disparos){
+        _matrizDisparos[pd.pos.first][pd.pos.second] = true;
+    }
+
+    list<pair<Jugador, PosYDir>>::iterator pubIt = _jvPub.begin();
+    list<infoJugadorPriv>::iterator privIt = _jvPriv.begin();
+    while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
+        if(_matrizDisparos[pubIt->second.pos.first][pubIt->second.pos.second]){
+            // Le dieron a un jugador
+            // TODO Usar vivo para mantener la complejidad pedida, no acceder
+            // directamente al trie
+            _jugadores[pubIt->first] = NULL;
+            pubIt = _jvPub.erase(pubIt);
+            privIt = _jvPriv.erase(privIt);
+        }
+        ++pubIt;
+        ++privIt;
+    }
+    assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
+
+
+    pubIt = _jvPub.begin();
+    privIt = _jvPriv.begin();
+    while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
+        ++pubIt;
+        ++privIt;
+    }
+    assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
+
+    // Limpiar _matrizDisparos
+    for(PosYDir pd : disparos){
+        _matrizDisparos[pd.pos.first][pd.pos.second] = false;
+    }
 
     _cantidadPasos++;
 };
@@ -290,6 +330,9 @@ PosYDir ExtremeExorcism::posicionEspecial() const {
 
 
 list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
+    // Esto es como _listaPosicionesDisparos del tp2, pero retorna una lista de
+    // PosYDir en vez de lista de Pos
+    // TODO puede tener repetidos, me imagino que no importa, pero chequear
 
     list<PosYDir> res;
 
@@ -310,17 +353,19 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
 
         fanPub++;
     }
+
+    return res;
 }
 
 
 set<Pos> ExtremeExorcism::posicionesDisparadas() const {
+    // TODO No dice de fantasmas, pero asumo que es solo de fantasmas. Tiene
+    // sentido? Quedaría igual que posicionesDisparos del tp3
     set<Pos> res;
-    list<PosYDir> disparos_fantasmas = disparosFantasmas();
-    for(auto disp : disparos_fantasmas){
-        res.emplace(disp.pos);
-    }
+    for(PosYDir pd : disparosFantasmas())
+        res.insert(pd.pos);
     return res;
-};
+}
 
 
 bool ExtremeExorcism::jugadorVivo(Jugador j) const {
