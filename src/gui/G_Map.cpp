@@ -33,7 +33,7 @@ void G_Map::render(SDL_Renderer *renderer) const {
 
 Pos G_Map::translate(Pos p) const {
   return Pos(p.first * _tt.tile_width() + _map_rect.x, 
-      _map_rect.h - p.second * _tt.tile_height() + _map_rect.y);
+      _map_rect.h - (p.second + 1) * _tt.tile_height() + _map_rect.y);
 }
 
 Pos mover(Pos p, Dir d) {
