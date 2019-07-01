@@ -201,10 +201,6 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
 }
 
 list<Pos> ExtremeExorcism::_listaDisparosFantasmas() const {
-    // Esto es como _listaPosicionesDisparos del tp2, pero retorna una lista de
-    // PosYDir en vez de lista de Pos
-    // TODO puede tener repetidos, me imagino que no importa, pero chequear
-
     list<Pos> res;
 
     auto fanPub = _fvPub.begin();
@@ -442,8 +438,6 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
 
 
 set<Pos> ExtremeExorcism::posicionesDisparadas() const {
-    // TODO No dice de fantasmas, pero asumo que es solo de fantasmas. Tiene
-    // sentido? Quedaría igual que posicionesDisparos del tp3
     set<Pos> res;
     for(Pos pos : _listaDisparosFantasmas())
         res.insert(pos);
@@ -472,20 +466,10 @@ PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
 
 
 const set<Jugador> ExtremeExorcism::jugadores() const {
-    // TODO Creo que la función tenía que ser O(1). Chequear
-    set<Jugador> jugs;
-    for(auto j : _jugadores.claves()){
-        jugs.insert(j);
-    }
-    return jugs;
+    return _jugadores.claves();
 };
 
 
 const list<Fantasma> ExtremeExorcism::fantasmas() const {
-    // TODO Creo que la función tenía que ser O(1). Chequear
-    list<Fantasma> res;
-    for(auto f : _fantasmas){
-        res.push_back(f);
-    }
-    return res;
+    return _fvPriv;
 };
