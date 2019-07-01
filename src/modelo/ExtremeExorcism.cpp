@@ -471,5 +471,8 @@ const set<Jugador> ExtremeExorcism::jugadores() const {
 
 
 const list<Fantasma> ExtremeExorcism::fantasmas() const {
-    return _fvPriv;
+    list<Fantasma> res;
+    for(Fantasma f : _fantasmas)
+        res.push_back(f);
+    return res;
 };
