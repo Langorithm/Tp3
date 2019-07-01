@@ -81,7 +81,7 @@ private:
   Evento _crearEvento(Accion a, PosYDir pd);
   PosYDir _aplicarMover(Accion a, PosYDir pd);
   Fantasma _crearFantasmaYHacerloVivir(const list< Accion > &acciones, PosYDir pd);
-  void _inicializarMatrizDisparos(const Habitacion &h);
+  void _inicializarMatrizDisparos();
   Evento _recorrer(const list<Evento> &eventos, int cantPasos) const;
   bool _matarFantasmas(PosYDir);
   void _nuevaRonda(Fantasma);

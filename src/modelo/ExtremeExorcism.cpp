@@ -114,10 +114,10 @@ Fantasma ExtremeExorcism::_crearFantasmaYHacerloVivir(const list< Accion > &acci
     return fantasma;
 }
 
-void ExtremeExorcism::_inicializarMatrizDisparos(const Habitacion &h){
-    for(int i=0; i<h.tam(); i++){
+void ExtremeExorcism::_inicializarMatrizDisparos(){
+    for(int i=0; i<_hab.tam(); i++){
         vector<bool> col;
-        for(int j=0; j<h.tam(); j++)
+        for(int j=0; j<_hab.tam(); j++)
             col.push_back(false);
         _matrizDisparos.push_back(col);
     }
@@ -238,7 +238,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     Fantasma primerFantasma = _crearFantasmaYHacerloVivir(acciones_fantasma, f_init);
     _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
 
-    _inicializarMatrizDisparos(h);
+    _inicializarMatrizDisparos();
 
     _cantidadPasos = 0;
 
