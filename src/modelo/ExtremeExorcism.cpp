@@ -4,8 +4,9 @@
 //--------------------------------------------- Start Funciones Privadas
 
 // Complejidad a Cumplir: O(?)
-void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
-    infoJugadorPriv *info = _jugadores[j];
+void ExtremeExorcism::_losDemasJugadoresEsperan(infoJugadorPriv *info){
+    // Le agrega un pasar a todos los jugadores cuyo infoJugadorPriv sea
+    // distinto a info. Si info es NULL, es lo agrega a todos
 
     list<pair<Jugador, PosYDir>>::iterator pubIt = _jvPub.begin();
     list<infoJugadorPriv>::iterator privIt = _jvPriv.begin();
@@ -246,6 +247,12 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 
 
 void ExtremeExorcism::pasar(){
+    _moverFantasmas();
+    _losDemasJugadoresEsperan(NULL);
+}
+
+
+void ExtremeExorcism::_moverFantasmas(){
     list<Pos> disparos = _listaDisparosFantasmas(_cantidadPasos);
 
     for(Pos pos : disparos){
@@ -330,9 +337,9 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     }
 
 
-    _losDemasJugadoresEsperan(j);
+    _losDemasJugadoresEsperan(jPriv);
 
-    pasar(); // La funcion en donde se mueven todos los fantasmas
+    _moverFantasmas();
 };
 
 

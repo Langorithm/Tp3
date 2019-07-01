@@ -75,7 +75,7 @@ private:
 
   // Funciones Privadas
 
-  void _losDemasJugadoresEsperan(Jugador j);
+  void _losDemasJugadoresEsperan(infoJugadorPriv *);
   void _revivirTodosLosJugadores();
   list< Evento > _armarListaDeEventos(const list< Accion > &, PosYDir);
   Evento _crearEvento(Accion a, PosYDir pd);
@@ -87,6 +87,7 @@ private:
   void _nuevaRonda(Fantasma);
   void _regenerarFantasmas();
   void _nuevoFantasmaEspecial(Fantasma);
+  void _moverFantasmas();
   list<Pos> _listaDisparosFantasmas(int) const;
 
 };
