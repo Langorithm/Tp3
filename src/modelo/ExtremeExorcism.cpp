@@ -258,7 +258,7 @@ void ExtremeExorcism::pasar(){
         if(_matrizDisparos[pubIt->second.pos.first][pubIt->second.pos.second]){
             // Le dieron a un jugador
             *(privIt->vivo) = NULL;
-            assert(_jugadores[pubIt->first] == NULL);  // TODO Esta línea va a romper con las complejidades pedidas, comentar en la versión final
+            /* assert(_jugadores[pubIt->first] == NULL);  // Esta línea va a romper con las complejidades pedidas, comentar en la versión final */
             pubIt = _jvPub.erase(pubIt);
             privIt = _jvPriv.erase(privIt);
         }else{
