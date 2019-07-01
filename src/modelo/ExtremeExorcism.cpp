@@ -303,13 +303,29 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     Evento evento_nuevo = _crearEvento(a, nuevaPosYDir);
     jPriv->acciones.push_back(evento_nuevo);
 
-    // TODO Usar el "vivo?" del diseño para que nos de la complejidad
-    for(pair<Jugador, PosYDir> &info : _jvPub) { // Modifico j en jvPub
-        if (info.first == j){
-            info.second.dir = evento_nuevo.dir;
-            info.second.pos = evento_nuevo.pos;
+    // El código comentado es claro pero no cumple con las complejidades, así
+    // que tengo que hacer algo un poco más feo (ver avajo)
+    /* for(pair<Jugador, PosYDir> &info : _jvPub) { // Modifico j en jvPub */
+    /*     if (info.first == j){ */
+    /*         info.second.dir = evento_nuevo.dir; */
+    /*         info.second.pos = evento_nuevo.pos; */
+    /*     } */
+    /* } */
+    list<pair<Jugador, PosYDir>>::iterator pubIt = _jvPub.begin();
+    list<infoJugadorPriv>::iterator privIt = _jvPriv.begin();
+    while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
+        if(*(privIt->vivo) == jPriv){
+            assert(pubIt->first == j);  // Comentar para cumplir con las complejidades
+            (pubIt->second).dir = evento_nuevo.dir;
+            (pubIt->second).pos = evento_nuevo.pos;
         }
+        else{
+            assert(pubIt->first != j);  // Comentar para cumplir con las complejidades
+        }
+        ++pubIt;
+        ++privIt;
     }
+    assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
 
     if(a == DISPARAR && _matarFantasmas(evento_nuevo.pos_y_dir())){
         // De todos los fantasmas que se mataron, uno de esos es el principal
