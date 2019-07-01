@@ -52,7 +52,7 @@ private:
 
     struct infoJugadorPriv{
         list<Evento> acciones;
-        // TODO agregar el vivo para que nos de bien la complejidad
+        infoJugadorPriv **vivo;
     };
 
   list<pair<Jugador, PosYDir>> _jvPub;

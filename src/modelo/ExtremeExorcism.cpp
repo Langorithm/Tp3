@@ -4,23 +4,25 @@
 //--------------------------------------------- Start Funciones Privadas
 
 // Complejidad a Cumplir: O(?)
-// Complejidad Actual: O(#jv)
-// TODO La complejidad está mal, ver el comentario adentro
-// Quedaría O(#jv * max(|j|))
-// TODO Nota interesante: en la correción del TP2 no se dieron cuenta de que
-// estaba mal
 void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
-    list< pair<Jugador, PosYDir> >::iterator itPublico = begin(_jvPub);
-    for(infoJugadorPriv &jug : _jvPriv){
+    infoJugadorPriv *info = _jugadores[j];
 
-        if( itPublico->first != j) {  // TODO Ojo con la complejidad de esto!
-
-            Evento evento_anterior = jug.acciones.back();
+    list<pair<Jugador, PosYDir>>::iterator pubIt = _jvPub.begin();
+    list<infoJugadorPriv>::iterator privIt = _jvPriv.begin();
+    while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
+        if(*(privIt->vivo) != info){
+            /* assert(pubIt->first != j);  // Comentar para cumplir con las complejidades */
+            Evento evento_anterior = privIt->acciones.back();
             Evento evento_nuevo = Evento(evento_anterior.pos, evento_anterior.dir, false);
-            jug.acciones.push_back(evento_nuevo);
+            privIt->acciones.push_back(evento_nuevo);
         }
-        itPublico++;
+        else{
+            /* assert(pubIt->first == j);  // Comentar para cumplir con las complejidades */
+        }
+        ++pubIt;
+        ++privIt;
     }
+    assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
 }
 
 void ExtremeExorcism::_revivirTodosLosJugadores(){
@@ -36,6 +38,7 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
 
     for(Jugador j : _jugadores.claves()){
         infoJugadorPriv jPriv;
+        jPriv.vivo = &_jugadores[j];
         PosYDir pd = inicial.at(j);
         pair<Jugador, PosYDir> jPub(j, PosYDir(pd.pos, pd.dir));
 
@@ -45,6 +48,7 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
 
 
         _jvPriv.push_back(jPriv);
+        *(jPriv.vivo) = &_jvPriv.back();
         _jugadores[j] = &_jvPriv.back();
 
         _jvPub.push_back(jPub);
@@ -257,9 +261,8 @@ void ExtremeExorcism::pasar(){
     while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
         if(_matrizDisparos[pubIt->second.pos.first][pubIt->second.pos.second]){
             // Le dieron a un jugador
-            // TODO Usar vivo para mantener la complejidad pedida, no acceder
-            // directamente al trie
-            _jugadores[pubIt->first] = NULL;
+            *(privIt->vivo) = NULL;
+            assert(_jugadores[pubIt->first] == NULL);  // TODO Esta línea va a romper con las complejidades pedidas, comentar en la versión final
             pubIt = _jvPub.erase(pubIt);
             privIt = _jvPriv.erase(privIt);
         }else{
