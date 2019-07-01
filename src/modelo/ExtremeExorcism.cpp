@@ -200,13 +200,13 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
     return eventosAux[cantPasos % eventosAux.size()];
 }
 
-list<Pos> ExtremeExorcism::_listaDisparosFantasmas() const {
+list<Pos> ExtremeExorcism::_listaDisparosFantasmas(int cantPasos) const {
     list<Pos> res;
 
     auto fanPub = _fvPub.begin();
     for(auto fanPriv : _fvPriv){
 
-        Evento evento_fantasma = _recorrer(fanPriv, _cantidadPasos);
+        Evento evento_fantasma = _recorrer(fanPriv, cantPasos);
         PosYDir pd = evento_fantasma.pos_y_dir();
 
         if(evento_fantasma.dispara){
@@ -246,7 +246,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 
 
 void ExtremeExorcism::pasar(){
-    list<Pos> disparos = _listaDisparosFantasmas();
+    list<Pos> disparos = _listaDisparosFantasmas(_cantidadPasos);
 
     for(Pos pos : disparos){
         _matrizDisparos[pos.first][pos.second] = true;
@@ -439,7 +439,7 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
 
 set<Pos> ExtremeExorcism::posicionesDisparadas() const {
     set<Pos> res;
-    for(Pos pos : _listaDisparosFantasmas())
+    for(Pos pos : _listaDisparosFantasmas(_cantidadPasos-1))
         res.insert(pos);
     return res;
 }
