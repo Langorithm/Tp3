@@ -350,20 +350,18 @@ bool ExtremeExorcism::_matarFantasmas(PosYDir pd){
 
     list<PosYDir>::iterator pubIt = _fvPub.begin();
     list<Fantasma>::iterator privIt = _fvPriv.begin();
+    bool es_especial = true;
     while(pubIt != _fvPub.end() && privIt != _fvPriv.end()){
         if(_matrizDisparos[pubIt->pos.first][pubIt->pos.second]){
             // Le dieron a un fantasma
-            // TODO Revisar la complejidad de comparar fantasmas, en el TP2 la
-            // pusimos O(1) pero no se si es correcto. Por ahí tiene que ver
-            // con que algo está por referencia
-            // TODO Chequear que sea efectivamente front() y no back()
-            if(*privIt == _fvPriv.front())
+            if(es_especial)
                 res = true;
             pubIt = _fvPub.erase(pubIt);
             privIt = _fvPriv.erase(privIt);
         }
         ++pubIt;
         ++privIt;
+        es_especial = false; // el especial siempre es el primero
     }
 
     // La iteración sobre ambas listas tiene que haber terminado al mismo
