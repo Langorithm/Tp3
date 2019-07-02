@@ -22,7 +22,7 @@ Desde el inicio del proyecto:
 Se necesitan dependencias que pueden ser instaladas en Ubuntu de la siguiente
 manera:
 
-    sudo apt install libboost-iostream-dev libboost-filesystem-dev libsdl2-dev libsdl2-image-dev
+    sudo apt install libboost-iostreams-dev libboost-filesystem-dev libsdl2-dev libsdl2-image-dev
 
 ## Compilación
 
@@ -34,7 +34,7 @@ Luego:
 
 1. `mkdir build`
 2. `cd build`
-3. `cmake -DWITH-GUI=ON ..`
+3. `cmake -WITH-GUI=ON ..`
 4. `make`
 
 ## Ejecución

@@ -133,32 +133,47 @@ Evento _iesimo(const list<Evento> &eventos, int indice) {
 // Sospecho error by one
 // Cuidado con la complejidad de esto!
 Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) const{
-    cantPasos++;  // No sé por qué puse esto, pero hace que fallen menos tests
-    /*
-    int length = eventos.size();
-    int indice = _cantidadPasos % ((length+5)*2);
+    /* TODO modificar fantasmas para que usen vectores
+     * La funcion usa vectores de eventos mientras que los fantasmas tienen listas de eventos.
+     * Hay que modificar a los fants para q usen vectores.
+     * La funcion fue debuggeada y funciona si le pasamos vectores, pero no me animo
+     * a hacer todos los cambios en los fantasmas del juego entero.
+    Evento _recorrer(const vector<Evento> &eventos, int cantPasos) {
+        int length = eventos.size();
+        int indice = cantPasos % ((length+5)*2);
 
-    if(indice <= length){ // Devuelvo normal
+        if(cantPasos != 0) {
+            assert(cantPasos > 0);
+            if (indice <= length && indice != 0) { // Devuelvo normal
 
-        return _iesimo(eventos, indice);
+                return eventos[indice - 1];
 
-    } else if(length < indice <= (length+5) ){ // Devuelvo esperar posiicion final
+            } else if (length < indice && indice <= (length + 5)) { // Devuelvo esperar posiicion final
 
-        Evento res = eventos.back();
-        return Evento(res.pos,res.dir,false);
+                Evento res = eventos.back();
+                return Evento(res.pos, res.dir, false);
 
-    } else if( (length+5) < indice <= (2*length + 5) ){ // Devuelvo invertido
+            } else if ((length + 5) < indice && indice <= (2 * length + 5)) { // Devuelvo invertido
 
-        int indiceInvertido = (length - ((indice - 5) % length) ) + 1;
-        return _iesimo(eventos, indiceInvertido);
+                int indiceInvertido = (length - (indice - 5 - length));
+                assert(indiceInvertido < eventos.size());
+                assert(indiceInvertido >= 0);
 
-    } else if ( (2*length + 5) < indice <= (2*(length + 5)) ){ // Devuelvo esperar posicion inicial
+                Evento res = eventos[indiceInvertido];
+                return Evento(res.pos, dir_inversa(res.dir), res.dispara);
 
-        Evento res = eventos.front();
-        return Evento(res.pos,res.dir,false);
-    }
-    assert(false);*/
+            } else if (((2 * length + 5) < indice && indice <= (2 * (length + 5))) ||
+                       indice == 0) { // Devuelvo esperar posicion inicial
 
+                Evento res = eventos.front();
+                return Evento(res.pos, dir_inversa(res.dir), false);
+            }
+        } else {
+            return eventos[0];
+        }
+        assert(false);
+    } */
+    cantPasos++;
     vector<Evento> eventosVec;
     vector<Evento> eventosVecInv;
     for (Evento ev : eventos){
@@ -194,6 +209,7 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
     eventosAux.push_back(evAux);
 
     return eventosAux[cantPasos % eventosAux.size()];
+
 }
 
 list<Pos> ExtremeExorcism::_listaDisparosFantasmas() const {
