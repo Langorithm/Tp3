@@ -4,23 +4,26 @@
 //--------------------------------------------- Start Funciones Privadas
 
 // Complejidad a Cumplir: O(?)
-// Complejidad Actual: O(#jv)
-// TODO La complejidad está mal, ver el comentario adentro
-// Quedaría O(#jv * max(|j|))
-// TODO Nota interesante: en la correción del TP2 no se dieron cuenta de que
-// estaba mal
-void ExtremeExorcism::_losDemasJugadoresEsperan(Jugador j){
-    list< pair<Jugador, PosYDir> >::iterator itPublico = begin(_jvPub);
-    for(infoJugadorPriv &jug : _jvPriv){
+void ExtremeExorcism::_losDemasJugadoresEsperan(infoJugadorPriv *info){
+    // Le agrega un pasar a todos los jugadores cuyo infoJugadorPriv sea
+    // distinto a info. Si info es NULL, es lo agrega a todos
 
-        if( itPublico->first != j) {  // TODO Ojo con la complejidad de esto!
-
-            Evento evento_anterior = jug.acciones.back();
+    list<pair<Jugador, PosYDir>>::iterator pubIt = _jvPub.begin();
+    list<infoJugadorPriv>::iterator privIt = _jvPriv.begin();
+    while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
+        if(*(privIt->vivo) != info){
+            /* assert(pubIt->first != j);  // Comentar para cumplir con las complejidades */
+            Evento evento_anterior = privIt->acciones.back();
             Evento evento_nuevo = Evento(evento_anterior.pos, evento_anterior.dir, false);
-            jug.acciones.push_back(evento_nuevo);
+            privIt->acciones.push_back(evento_nuevo);
         }
-        itPublico++;
+        else{
+            /* assert(pubIt->first == j);  // Comentar para cumplir con las complejidades */
+        }
+        ++pubIt;
+        ++privIt;
     }
+    assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
 }
 
 void ExtremeExorcism::_revivirTodosLosJugadores(){
@@ -36,6 +39,7 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
 
     for(Jugador j : _jugadores.claves()){
         infoJugadorPriv jPriv;
+        jPriv.vivo = &_jugadores[j];
         PosYDir pd = inicial.at(j);
         pair<Jugador, PosYDir> jPub(j, PosYDir(pd.pos, pd.dir));
 
@@ -45,6 +49,7 @@ void ExtremeExorcism::_revivirTodosLosJugadores(){
 
 
         _jvPriv.push_back(jPriv);
+        *(jPriv.vivo) = &_jvPriv.back();
         _jugadores[j] = &_jvPriv.back();
 
         _jvPub.push_back(jPub);
@@ -110,10 +115,10 @@ Fantasma ExtremeExorcism::_crearFantasmaYHacerloVivir(const list< Accion > &acci
     return fantasma;
 }
 
-void ExtremeExorcism::_inicializarMatrizDisparos(const Habitacion &h){
-    for(int i=0; i<h.tam(); i++){
+void ExtremeExorcism::_inicializarMatrizDisparos(){
+    for(int i=0; i<_hab.tam(); i++){
         vector<bool> col;
-        for(int j=0; j<h.tam(); j++)
+        for(int j=0; j<_hab.tam(); j++)
             col.push_back(false);
         _matrizDisparos.push_back(col);
     }
@@ -212,17 +217,13 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
 
 }
 
-list<Pos> ExtremeExorcism::_listaDisparosFantasmas() const {
-    // Esto es como _listaPosicionesDisparos del tp2, pero retorna una lista de
-    // PosYDir en vez de lista de Pos
-    // TODO puede tener repetidos, me imagino que no importa, pero chequear
-
+list<Pos> ExtremeExorcism::_listaDisparosFantasmas(int cantPasos) const {
     list<Pos> res;
 
     auto fanPub = _fvPub.begin();
     for(auto fanPriv : _fvPriv){
 
-        Evento evento_fantasma = _recorrer(fanPriv, _cantidadPasos);
+        Evento evento_fantasma = _recorrer(fanPriv, cantPasos);
         PosYDir pd = evento_fantasma.pos_y_dir();
 
         if(evento_fantasma.dispara){
@@ -254,7 +255,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     Fantasma primerFantasma = _crearFantasmaYHacerloVivir(acciones_fantasma, f_init);
     _revivirTodosLosJugadores(); // Aca me encargo de meterlos en jvPriv, jvPub
 
-    _inicializarMatrizDisparos(h);
+    _inicializarMatrizDisparos();
 
     _cantidadPasos = 0;
 
@@ -262,7 +263,13 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 
 
 void ExtremeExorcism::pasar(){
-    list<Pos> disparos = _listaDisparosFantasmas();
+    _moverFantasmas();
+    _losDemasJugadoresEsperan(NULL);
+}
+
+
+void ExtremeExorcism::_moverFantasmas(){
+    list<Pos> disparos = _listaDisparosFantasmas(_cantidadPasos);
 
     for(Pos pos : disparos){
         _matrizDisparos[pos.first][pos.second] = true;
@@ -273,9 +280,8 @@ void ExtremeExorcism::pasar(){
     while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
         if(_matrizDisparos[pubIt->second.pos.first][pubIt->second.pos.second]){
             // Le dieron a un jugador
-            // TODO Usar vivo para mantener la complejidad pedida, no acceder
-            // directamente al trie
-            _jugadores[pubIt->first] = NULL;
+            *(privIt->vivo) = NULL;
+            /* assert(_jugadores[pubIt->first] == NULL);  // Esta línea va a romper con las complejidades pedidas, comentar en la versión final */
             pubIt = _jvPub.erase(pubIt);
             privIt = _jvPriv.erase(privIt);
         }else{
@@ -316,13 +322,29 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     Evento evento_nuevo = _crearEvento(a, nuevaPosYDir);
     jPriv->acciones.push_back(evento_nuevo);
 
-    // TODO Usar el "vivo?" del diseño para que nos de la complejidad
-    for(pair<Jugador, PosYDir> &info : _jvPub) { // Modifico j en jvPub
-        if (info.first == j){
-            info.second.dir = evento_nuevo.dir;
-            info.second.pos = evento_nuevo.pos;
+    // El código comentado es claro pero no cumple con las complejidades, así
+    // que tengo que hacer algo un poco más feo (ver avajo)
+    /* for(pair<Jugador, PosYDir> &info : _jvPub) { // Modifico j en jvPub */
+    /*     if (info.first == j){ */
+    /*         info.second.dir = evento_nuevo.dir; */
+    /*         info.second.pos = evento_nuevo.pos; */
+    /*     } */
+    /* } */
+    list<pair<Jugador, PosYDir>>::iterator pubIt = _jvPub.begin();
+    list<infoJugadorPriv>::iterator privIt = _jvPriv.begin();
+    while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
+        if(*(privIt->vivo) == jPriv){
+            assert(pubIt->first == j);  // Comentar para cumplir con las complejidades
+            (pubIt->second).dir = evento_nuevo.dir;
+            (pubIt->second).pos = evento_nuevo.pos;
         }
+        else{
+            assert(pubIt->first != j);  // Comentar para cumplir con las complejidades
+        }
+        ++pubIt;
+        ++privIt;
     }
+    assert(pubIt == _jvPub.end() && privIt == _jvPriv.end());
 
     if(a == DISPARAR && _matarFantasmas(evento_nuevo.pos_y_dir())){
         // De todos los fantasmas que se mataron, uno de esos es el principal
@@ -331,9 +353,9 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     }
 
 
-    _losDemasJugadoresEsperan(j);
+    _losDemasJugadoresEsperan(jPriv);
 
-    pasar(); // La funcion en donde se mueven todos los fantasmas
+    _moverFantasmas();
 };
 
 
@@ -347,20 +369,18 @@ bool ExtremeExorcism::_matarFantasmas(PosYDir pd){
 
     list<PosYDir>::iterator pubIt = _fvPub.begin();
     list<Fantasma>::iterator privIt = _fvPriv.begin();
+    bool es_especial = true;
     while(pubIt != _fvPub.end() && privIt != _fvPriv.end()){
         if(_matrizDisparos[pubIt->pos.first][pubIt->pos.second]){
             // Le dieron a un fantasma
-            // TODO Revisar la complejidad de comparar fantasmas, en el TP2 la
-            // pusimos O(1) pero no se si es correcto. Por ahí tiene que ver
-            // con que algo está por referencia
-            // TODO Chequear que sea efectivamente front() y no back()
-            if(*privIt == _fvPriv.front())
+            if(es_especial)
                 res = true;
             pubIt = _fvPub.erase(pubIt);
             privIt = _fvPriv.erase(privIt);
         }
         ++pubIt;
         ++privIt;
+        es_especial = false; // el especial siempre es el primero
     }
 
     // La iteración sobre ambas listas tiene que haber terminado al mismo
@@ -441,10 +461,8 @@ list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
 
 
 set<Pos> ExtremeExorcism::posicionesDisparadas() const {
-    // TODO No dice de fantasmas, pero asumo que es solo de fantasmas. Tiene
-    // sentido? Quedaría igual que posicionesDisparos del tp3
     set<Pos> res;
-    for(Pos pos : _listaDisparosFantasmas())
+    for(Pos pos : _listaDisparosFantasmas(_cantidadPasos-1))
         res.insert(pos);
     return res;
 }
@@ -471,20 +489,13 @@ PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
 
 
 const set<Jugador> ExtremeExorcism::jugadores() const {
-    // TODO Creo que la función tenía que ser O(1). Chequear
-    set<Jugador> jugs;
-    for(auto j : _jugadores.claves()){
-        jugs.insert(j);
-    }
-    return jugs;
+    return _jugadores.claves();
 };
 
 
 const list<Fantasma> ExtremeExorcism::fantasmas() const {
-    // TODO Creo que la función tenía que ser O(1). Chequear
     list<Fantasma> res;
-    for(auto f : _fantasmas){
+    for(Fantasma f : _fantasmas)
         res.push_back(f);
-    }
     return res;
 };

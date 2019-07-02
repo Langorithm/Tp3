@@ -954,3 +954,40 @@ TEST(EE, DosFantasmasDisparan) {
   ee.pasar();
   EXPECT_EQ(ee.disparosFantasmas().size(), 2);
 }
+
+// Fantasma mata jugador
+TEST(EE, FantasmaMataEnLaDireccionCorrecta) {
+  Localizador *l = new LocalizadorEstatico({
+      {"0", {PosYDir({2, 0}, ARRIBA)}},
+  });
+  Habitacion h(3, {{1, 1}});
+  Contexto ctx(l);
+  set<Jugador> js{"0"};
+
+  ExtremeExorcism ee(h, js, PosYDir({2, 0}, ARRIBA),
+                     {ESPERAR, MIZQUIERDA, DISPARAR}, &ctx);
+  /* VALIDAR_ESTADO(1, "...\n" */
+  /*                   ".#.\n" */
+  /*                   "W.w\n", ee); */
+
+  ee.pasar();
+  /* VALIDAR_ESTADO(1, "...\n" */
+  /*                   ".#.\n" */
+  /*                   "W.w\n", ee); */
+
+  ee.pasar();
+  VALIDAR_ESTADO(1, "...\n"
+                    ".#.\n"
+                    ".qW\n", ee);
+
+  EXPECT_EQ(ee.posicionJugadores().size(), 1);
+  ee.pasar();
+  EXPECT_EQ(ee.disparosFantasmas().size(), 1);
+  EXPECT_EQ(ee.disparosFantasmas().front(), PosYDir(make_pair(1,0), IZQUIERDA));
+  EXPECT_EQ(ee.posicionesDisparadas().size(), 1);
+  EXPECT_EQ(ee.posicionesDisparadas().count(make_pair(0, 0)), 1);
+  VALIDAR_ESTADO(1, "...\n"
+                    ".#.\n"
+                    ".qW\n", ee);
+  delete l;
+}

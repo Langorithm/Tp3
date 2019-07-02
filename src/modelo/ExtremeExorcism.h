@@ -52,7 +52,7 @@ private:
 
     struct infoJugadorPriv{
         list<Evento> acciones;
-        // TODO agregar el vivo para que nos de bien la complejidad
+        infoJugadorPriv **vivo;
     };
 
   list<pair<Jugador, PosYDir>> _jvPub;
@@ -75,19 +75,20 @@ private:
 
   // Funciones Privadas
 
-  void _losDemasJugadoresEsperan(Jugador j);
+  void _losDemasJugadoresEsperan(infoJugadorPriv *);
   void _revivirTodosLosJugadores();
   list< Evento > _armarListaDeEventos(const list< Accion > &, PosYDir);
   Evento _crearEvento(Accion a, PosYDir pd);
   PosYDir _aplicarMover(Accion a, PosYDir pd);
   Fantasma _crearFantasmaYHacerloVivir(const list< Accion > &acciones, PosYDir pd);
-  void _inicializarMatrizDisparos(const Habitacion &h);
+  void _inicializarMatrizDisparos();
   Evento _recorrer(const list<Evento> &eventos, int cantPasos) const;
   bool _matarFantasmas(PosYDir);
   void _nuevaRonda(Fantasma);
   void _regenerarFantasmas();
   void _nuevoFantasmaEspecial(Fantasma);
-  list<Pos> _listaDisparosFantasmas() const;
+  void _moverFantasmas();
+  list<Pos> _listaDisparosFantasmas(int) const;
 
 };
 
