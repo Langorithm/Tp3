@@ -137,8 +137,8 @@ Evento _iesimo(const list<Evento> &eventos, int indice) {
 
 // Sospecho error by one
 // Cuidado con la complejidad de esto!
-Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) const{
-    /* TODO modificar fantasmas para que usen vectores
+/* Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) const{
+     TODO modificar fantasmas para que usen vectores
      * La funcion usa vectores de eventos mientras que los fantasmas tienen listas de eventos.
      * Hay que modificar a los fants para q usen vectores.
      * La funcion fue debuggeada y funciona si le pasamos vectores, pero no me animo
@@ -177,7 +177,7 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
             return eventos[0];
         }
         assert(false);
-    } */
+    }
     cantPasos++;
     vector<Evento> eventosVec;
     vector<Evento> eventosVecInv;
@@ -216,7 +216,50 @@ Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) co
     return eventosAux[cantPasos % eventosAux.size()];
 
 }
+ */
 
+Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) const {
+    assert(eventos.size() > 0);
+
+    cantPasos++;
+    vector<Evento> evs;
+    for (Evento ev : eventos) evs.push_back(ev);
+    Evento res = evs[0];
+
+    int rangoOriginal = eventos.size();
+    int rangoMax = (rangoOriginal + 5) * 2;
+    int i = cantPasos%rangoMax;
+
+    Evento esperar1 = evs[evs.size()-1];
+    esperar1.dispara = false;
+
+    Evento esperar2 = evs[0];
+    esperar2.dispara = false;
+    esperar2.dir = dir_inversa(esperar2.dir);
+
+
+    if (i < rangoOriginal) {
+        res = evs[i];
+        return res;
+    }
+
+    if (i < rangoOriginal + 5){
+        res = esperar1;
+        return res;
+    }
+
+    if (i >= rangoMax-5){
+        res = esperar2;
+        return res;
+    }
+
+    int j = rangoOriginal*2 - (i - 5) -1;
+    Evento eventoReverso = evs[j];
+    eventoReverso.dir = dir_inversa(eventoReverso.dir);
+    res = eventoReverso;
+    return res;
+
+}
 list<Pos> ExtremeExorcism::_listaDisparosFantasmas(int cantPasos) const {
     list<Pos> res;
 

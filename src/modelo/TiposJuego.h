@@ -18,7 +18,7 @@ struct Evento;
 using Fantasma = list<Evento>;
 
 enum Dir {
-    ARRIBA = 0, ABAJO, IZQUIERDA, DERECHA
+    ARRIBA = 0, ABAJO = 2, IZQUIERDA = 1,  DERECHA =3
 };
 
 Dir dir_inversa(Dir);
