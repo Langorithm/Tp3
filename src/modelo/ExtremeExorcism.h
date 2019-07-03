@@ -77,12 +77,12 @@ private:
 
   void _losDemasJugadoresEsperan(infoJugadorPriv *);
   void _revivirTodosLosJugadores();
-  list< Evento > _armarListaDeEventos(const list< Accion > &, PosYDir);
+  vector< Evento > _armarListaDeEventos(const list< Accion > &, PosYDir);
   Evento _crearEvento(Accion a, PosYDir pd);
   PosYDir _aplicarMover(Accion a, PosYDir pd);
   Fantasma _crearFantasmaYHacerloVivir(const list< Accion > &acciones, PosYDir pd);
   void _inicializarMatrizDisparos();
-  Evento _recorrer(const list<Evento> &eventos, int cantPasos) const;
+  Evento _recorrer(const vector<Evento> &eventos, int cantPasos) const;
   bool _matarFantasmas(PosYDir);
   void _nuevaRonda(Fantasma);
   void _regenerarFantasmas();

@@ -92,8 +92,8 @@ Evento ExtremeExorcism::_crearEvento(Accion a, PosYDir pd){
     }
 }
 
-list< Evento > ExtremeExorcism::_armarListaDeEventos(const list< Accion > &acciones, PosYDir pd){
-    list< Evento > res;
+vector< Evento > ExtremeExorcism::_armarListaDeEventos(const list< Accion > &acciones, PosYDir pd){
+    vector< Evento > res;
     Evento evento_inicial = Evento(pd.pos, pd.dir, false);
     res.push_back(evento_inicial);
     for(auto a : acciones){
@@ -135,98 +135,13 @@ Evento _iesimo(const list<Evento> &eventos, int indice) {
     assert(false);  // Sí o sí tiene que retornar algo en la línea de arriba
 }
 
-// Sospecho error by one
-// Cuidado con la complejidad de esto!
-/* Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) const{
-     TODO modificar fantasmas para que usen vectores
-     * La funcion usa vectores de eventos mientras que los fantasmas tienen listas de eventos.
-     * Hay que modificar a los fants para q usen vectores.
-     * La funcion fue debuggeada y funciona si le pasamos vectores, pero no me animo
-     * a hacer todos los cambios en los fantasmas del juego entero.
-    Evento _recorrer(const vector<Evento> &eventos, int cantPasos) {
-        int length = eventos.size();
-        int indice = cantPasos % ((length+5)*2);
-
-        if(cantPasos != 0) {
-            assert(cantPasos > 0);
-            if (indice <= length && indice != 0) { // Devuelvo normal
-
-                return eventos[indice - 1];
-
-            } else if (length < indice && indice <= (length + 5)) { // Devuelvo esperar posiicion final
-
-                Evento res = eventos.back();
-                return Evento(res.pos, res.dir, false);
-
-            } else if ((length + 5) < indice && indice <= (2 * length + 5)) { // Devuelvo invertido
-
-                int indiceInvertido = (length - (indice - 5 - length));
-                assert(indiceInvertido < eventos.size());
-                assert(indiceInvertido >= 0);
-
-                Evento res = eventos[indiceInvertido];
-                return Evento(res.pos, dir_inversa(res.dir), res.dispara);
-
-            } else if (((2 * length + 5) < indice && indice <= (2 * (length + 5))) ||
-                       indice == 0) { // Devuelvo esperar posicion inicial
-
-                Evento res = eventos.front();
-                return Evento(res.pos, dir_inversa(res.dir), false);
-            }
-        } else {
-            return eventos[0];
-        }
-        assert(false);
-    }
-    cantPasos++;
-    vector<Evento> eventosVec;
-    vector<Evento> eventosVecInv;
-    for (Evento ev : eventos){
-        eventosVec.push_back(ev);
-    }
-
-    for (int i = eventosVec.size()-1; i >= 0; --i) {
-        Evento ev = eventosVec[i];
-        ev.dir = dir_inversa(ev.dir);
-        eventosVecInv.push_back(ev);
-    }
-
-    vector<Evento> eventosAux;
-
-    for (Evento ev : eventosVec) eventosAux.push_back(ev);
-    Evento evAux = eventosVec[eventosVec.size()-1];
-    evAux.dispara = false;
-
-    eventosAux.push_back(evAux);
-    eventosAux.push_back(evAux);
-    eventosAux.push_back(evAux);
-    eventosAux.push_back(evAux);
-    eventosAux.push_back(evAux);
-
-    for (Evento ev : eventosVecInv) eventosAux.push_back(ev);
-    evAux = eventosVecInv[eventosVecInv.size()-1];
-    evAux.dispara = false;
-
-    eventosAux.push_back(evAux);
-    eventosAux.push_back(evAux);
-    eventosAux.push_back(evAux);
-    eventosAux.push_back(evAux);
-    eventosAux.push_back(evAux);
-
-    return eventosAux[cantPasos % eventosAux.size()];
-
-}
- */
-
-Evento ExtremeExorcism::_recorrer(const list<Evento> &eventos, int cantPasos) const {
-    assert(eventos.size() > 0);
+Evento ExtremeExorcism::_recorrer(const vector<Evento> &evs, int cantPasos) const {
+    assert(evs.size() > 0);
 
     cantPasos++;
-    vector<Evento> evs;
-    for (Evento ev : eventos) evs.push_back(ev);
     Evento res = evs[0];
 
-    int rangoOriginal = eventos.size();
+    int rangoOriginal = evs.size();
     int rangoMax = (rangoOriginal + 5) * 2;
     int i = cantPasos%rangoMax;
 
@@ -391,7 +306,10 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
 
     if(a == DISPARAR && _matarFantasmas(evento_nuevo.pos_y_dir())){
         // De todos los fantasmas que se mataron, uno de esos es el principal
-        _nuevaRonda(jPriv->acciones);
+        vector<Evento> acciones;
+        for(Evento ev : jPriv->acciones)
+            acciones.push_back(ev);
+        _nuevaRonda(acciones);
         return;
     }
 

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <vector>
 #include <utility>
 #include <iostream>
 
@@ -15,7 +16,7 @@ using Ronda = unsigned int;
 
 struct Evento;
 
-using Fantasma = list<Evento>;
+using Fantasma = vector<Evento>;
 
 enum Dir {
     ARRIBA = 0, ABAJO, IZQUIERDA,  DERECHA 
