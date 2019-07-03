@@ -292,12 +292,12 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a){
     list<infoJugadorPriv>::iterator privIt = _jvPriv.begin();
     while(pubIt != _jvPub.end() && privIt != _jvPriv.end()){
         if(*(privIt->vivo) == jPriv){
-            assert(pubIt->first == j);  // Comentar para cumplir con las complejidades
+            /* assert(pubIt->first == j);  // Comentar para cumplir con las complejidades */
             (pubIt->second).dir = evento_nuevo.dir;
             (pubIt->second).pos = evento_nuevo.pos;
         }
         else{
-            assert(pubIt->first != j);  // Comentar para cumplir con las complejidades
+            /* assert(pubIt->first != j);  // Comentar para cumplir con las complejidades */
         }
         ++pubIt;
         ++privIt;
